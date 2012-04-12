@@ -1,7 +1,9 @@
 # grunt-dev
 
 Grunt task for running jasmine specs.
-Status: in development
+
+_Status: in development_
+NOT STABLE
 
 ## Getting Started
 Install this grunt plugin next to your project's [grunt.js gruntfile][getting_started] with: `npm install grunt-dev`
