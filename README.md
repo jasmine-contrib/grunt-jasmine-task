@@ -6,11 +6,23 @@ Status: stable
 ## Getting Started
 Install this grunt plugin next to your project's [grunt.js gruntfile][getting_started] with: `npm install grunt-jasmine-task`
 
-Then add this line to your project's `grunt.js` gruntfile:
+Then add this line to your project's `grunt.js` gruntfile at the bottom:
 
 ```javascript
 grunt.loadNpmTasks('grunt-jasmine-task');
 ```
+
+also add this to the grunt.initConfig object in the same file:
+```javascript
+jasmine: {
+  index: ['specs/index.html']
+},
+```
+
+now you can run the jasmine task with:
+
+```grunt jasmine```
+
 
 [grunt]: https://github.com/cowboy/grunt
 [getting_started]: https://github.com/cowboy/grunt/blob/master/docs/getting_started.md
