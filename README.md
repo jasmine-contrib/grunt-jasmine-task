@@ -1,15 +1,14 @@
-# grunt-dev
+# grunt-jasmine-task
 
-Grunt task for running jasmine specs.
-Status: in development
+Grunt task for running Jasmine specs
 
 ## Getting Started
-Install this grunt plugin next to your project's [grunt.js gruntfile][getting_started] with: `npm install grunt-dev`
+Install this grunt plugin next to your project's [grunt.js gruntfile][getting_started] with: `npm install grunt-jasmine-task`
 
 Then add this line to your project's `grunt.js` gruntfile:
 
 ```javascript
-grunt.loadNpmTasks('grunt-dev');
+grunt.loadNpmTasks('grunt-jasmine-task');
 ```
 
 [grunt]: https://github.com/cowboy/grunt
