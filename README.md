@@ -1,7 +1,7 @@
 # grunt-jasmine-task v0.1.1
 
 Grunt task for running jasmine specs.
-Status: in development
+Status: stable
 
 ## Getting Started
 Install this grunt plugin next to your project's [grunt.js gruntfile][getting_started] with: `npm install grunt-jasmine-task`
