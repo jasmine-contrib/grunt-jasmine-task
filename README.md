@@ -19,7 +19,7 @@ jasmine: {
   index: ['specs/index.html']
 },
 ```
-
+replace ```specs/index.html``` obviously with the location of your jasmine spec running html file.
 now you can run the jasmine task with:
 
 ```grunt jasmine```
