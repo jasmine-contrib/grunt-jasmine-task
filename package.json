@@ -1,8 +1,8 @@
 {
-  "name": "Grunt-Jasmine-Task",
-  "description": "Grunt task for running jasmine specs",
-  "version": "1.0.0",
-  "homepage": "https://github.com/creynders/Grunt-Jasmine-Task",
+  "name": "grunt-jasmine-task",
+  "description": "Grunt task for running Jasmine specs",
+  "version": "0.1.0",
+  "homepage": "https://github.com/creynders/grunt-jasmine-task",
   "author": {
     "name": "Camille Reynders",
     "email": "info@creynders.be",
@@ -10,19 +10,19 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/creynders/Grunt-Jasmine-Task.git"
+    "url": "git://github.com/creynders/grunt-jasmine-task.git"
   },
   "bugs": {
-    "url": "https://github.com/creynders/Grunt-Jasmine-Task/issues"
+    "url": "https://github.com/creynders/grunt-jasmine-task/issues"
   },
   "licenses": [
     {
       "type": "MIT",
-      "url": "https://github.com/creynders/Grunt-Jasmine-Task/blob/master/LICENSE-MIT"
+      "url": "https://github.com/creynders/grunt-jasmine-task/blob/master/LICENSE-MIT"
     }
   ],
   "main": "grunt.js",
-  "bin": "bin/Grunt-Jasmine-Task",
+  "bin": "bin/grunt-jasmine-task",
   "engines": {
     "node": "*"
   },
@@ -30,7 +30,8 @@
     "test": "grunt test"
   },
   "dependencies": {
-    "grunt": "~0.3.8"
+    "grunt": "~0.3.8",
+    "temporary": "~0.0.2"
   },
   "devDependencies": {
     "grunt": "~0.3.8"
