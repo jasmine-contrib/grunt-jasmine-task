@@ -1,4 +1,4 @@
-# grunt-jasmine-task
+# grunt-jasmine-task v0.1.0
 
 Grunt task for running Jasmine specs
 
