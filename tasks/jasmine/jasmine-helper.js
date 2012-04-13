@@ -7,7 +7,7 @@
  * http://benalman.com/about/license/
  */
 
-/*global QUnit:false, alert:true*/
+/*global jasmine:true, alert:true*/
 
 // Send messages to the parent phantom.js process via alert! Good times!!
 function sendMessage() {
@@ -22,6 +22,9 @@ GruntReporter.prototype = {
     _getTime : function(){
         return new Date().getTime();
     },
+    /**
+     * @param {jasmine.Suite} suite
+     */
     _getSuitesToRoot : function( suite ){
         var result =[];
         do{
@@ -30,6 +33,9 @@ GruntReporter.prototype = {
         }while( suite );
         return result;
     },
+    /**
+     * @param {jasmine.Suite} suite
+     */
     reportRunnerResults : function(runner){
         var elapsed = this._getTime() - this._started;
         sendMessage( 'done', elapsed );
@@ -40,7 +46,6 @@ GruntReporter.prototype = {
      */
     reportSpecResults : function(spec) {
         var results = spec.results();
-        //{"totalCount":1,"passedCount":1,"failedCount":0,"skipped":false,"items_":[{"type":"expect","matcherName":"toBeInstanceOf","passed_":true,"actual":{"_listeners":{},"fqn":"jsfsa.State","name":"main","isInitial":false,"_transitions":{}},"message":"Passed.","trace":""}],"description":"should be of type jsfsa.State"}
         var suites = this._getSuitesToRoot( spec.suite );
         sendMessage( 'testDone', suites.join( ' ' ), spec.description, results.totalCount, results.passedCount, results.failedCount, results.skipped );
     }
