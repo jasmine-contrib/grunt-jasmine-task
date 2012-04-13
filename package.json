@@ -1,7 +1,7 @@
 {
   "name": "grunt-jasmine-task",
   "description": "Grunt task for running Jasmine specs",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "homepage": "https://github.com/creynders/grunt-jasmine-task",
   "author": {
     "name": "Camille Reynders",
