@@ -12,15 +12,15 @@ Then add this line to your project's `grunt.js` gruntfile at the bottom:
 grunt.loadNpmTasks('grunt-jasmine-task');
 ```
 
-also add this to the grunt.initConfig object in the same file:
+Also add this to the grunt.initConfig object in the same file:
 
 ```javascript
 jasmine: {
   index: ['specs/index.html']
 },
 ```
-replace ```specs/index.html``` obviously with the location of your jasmine spec running html file.
-now you can run the jasmine task with:
+Obviously you need to replace ```specs/index.html``` with the location of your jasmine spec running html file.
+Now you can run the jasmine task with:
 
 ```grunt jasmine```
 
