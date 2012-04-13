@@ -13,6 +13,7 @@ grunt.loadNpmTasks('grunt-jasmine-task');
 ```
 
 also add this to the grunt.initConfig object in the same file:
+
 ```javascript
 jasmine: {
   index: ['specs/index.html']
