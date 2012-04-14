@@ -20,7 +20,7 @@ Then add this line to your project's `grunt.js` gruntfile at the bottom:
 grunt.loadNpmTasks('grunt-jasmine-task');
 ```
 
-Also add this to the grunt.initConfig object in the same file:
+Also add this to the ```grunt.initConfig``` object in the same file:
 
 ```javascript
 jasmine: {
@@ -32,11 +32,6 @@ Now you can run the jasmine task with:
 
 ```grunt jasmine```
 
-
-
-## Documentation
-_(Coming soon)_
-
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. 
 Add unit tests for any new or changed functionality. 
@@ -45,7 +40,9 @@ Lint and test your code using [grunt][grunt].
 More info on creating grunt plugins
 
 ## Release History
-_(Nothing yet)_
+
+* v0.1.1: stable
+* v0.1.0: broken
 
 ## License
 Copyright (c) 2012 Camille Reynders  
