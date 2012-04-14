@@ -2,10 +2,11 @@
 [getting_started]: https://github.com/cowboy/grunt/blob/master/docs/getting_started.md
 [plugin_docs]: https://github.com/cowboy/grunt/blob/master/docs/plugins.md
 
-# grunt-jasmine-task v0.1.1
+# grunt-jasmine-task
 
 Grunt task for running jasmine specs.
-Status: stable
+
+__Status: stable__
 
 ## Getting Started
 
