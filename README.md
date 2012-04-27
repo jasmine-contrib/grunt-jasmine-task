@@ -51,7 +51,7 @@ jasmine: {
 ```
 This is useful for async assertions that may require more than 10 seconds to run.
 
-Now you can run the jasmine task with:
+Now you can __run the jasmine task__ with:
 
 ```grunt jasmine```
 
