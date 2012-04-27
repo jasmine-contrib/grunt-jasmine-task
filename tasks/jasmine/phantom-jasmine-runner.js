@@ -33,24 +33,24 @@ var last = new Date();
 
 // Messages are sent to the parent by appending them to the tempfile.
 function sendMessage( args ){
-	last = new Date();
-	fs.write( tmpfile, JSON.stringify( args ) + '\n', 'a' );
-	// Exit when all done.
-	if( /^done/.test( args[0] ) ){
-		phantom.exit();
-	}
+    last = new Date();
+    fs.write( tmpfile, JSON.stringify( args ) + '\n', 'a' );
+    // Exit when all done.
+    if( /^done/.test( args[0] ) ){
+        phantom.exit();
+    }
 }
 
 // Send a debugging message.
 function sendDebugMessage(){
-	sendMessage( ['debug'].concat( [].slice.call( arguments ) ) );
+    sendMessage( ['debug'].concat( [].slice.call( arguments ) ) );
 }
 
 // Abort if Jasmine doesn't do anything for a while.
 setInterval( function(){
-	if( new Date() - last > timeout ){
-		sendMessage( ['done_timeout'] );
-	}
+    if( new Date() - last > timeout ){
+        sendMessage( ['done_timeout'] );
+    }
 }, 1000 );
 
 // Create a new page.
@@ -58,7 +58,7 @@ var page = require( 'webpage' ).create();
 
 // Jasmine sends its messages via alert(jsonstring);
 page.onAlert = function( args ){
-	sendMessage( JSON.parse( args ) );
+    sendMessage( JSON.parse( args ) );
 };
 
 // Keep track if Jasmine has been injected already.
@@ -66,39 +66,39 @@ var injected;
 
 // Additional message sending
 page.onConsoleMessage = function( message ){
-	sendMessage( ['console', message] );
+    sendMessage( ['console', message] );
 };
 page.onResourceRequested = function( request ){
-	if( /\/jasmine\.js$/.test( request.url ) ){
-		// Reset injected to false, if for some reason a redirect occurred and
-		// the test page (including jasmine.js) had to be re-requested.
-		injected = false;
-	}
-	sendDebugMessage( 'onResourceRequested', request.url );
+    if( /\/jasmine\.js$/.test( request.url ) ){
+        // Reset injected to false, if for some reason a redirect occurred and
+        // the test page (including jasmine.js) had to be re-requested.
+        injected = false;
+    }
+    sendDebugMessage( 'onResourceRequested', request.url );
 };
 page.onResourceReceived = function( request ){
-	if( request.stage === 'end' ){
-		sendDebugMessage( 'onResourceReceived', request.url );
-	}
+    if( request.stage === 'end' ){
+        sendDebugMessage( 'onResourceReceived', request.url );
+    }
 };
 
 
 page.open( url, function( status ){
-	// Only execute this code if Jasmine has not yet been injected.
-	if( injected ){
-		return;
-	}
-	injected = true;
-	// The window has loaded.
-	if( status !== 'success' ){
-		// File loading failure.
-		sendMessage( ['done_fail', url] );
-	}else{
-		// Inject Jasmine helper file.
-		sendDebugMessage( 'inject', jasmineHelper );
-		page.injectJs( jasmineHelper );
-		// Because injection happens after window load, "begin" must be sent
-		// manually.
-		sendMessage( ['begin'] );
-	}
+    // Only execute this code if Jasmine has not yet been injected.
+    if( injected ){
+        return;
+    }
+    injected = true;
+    // The window has loaded.
+    if( status !== 'success' ){
+        // File loading failure.
+        sendMessage( ['done_fail', url] );
+    }else{
+        // Inject Jasmine helper file.
+        sendDebugMessage( 'inject', jasmineHelper );
+        page.injectJs( jasmineHelper );
+        // Because injection happens after window load, "begin" must be sent
+        // manually.
+        sendMessage( ['begin'] );
+    }
 } );
