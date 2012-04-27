@@ -48,7 +48,7 @@ module.exports = function ( grunt ) {
                 if ( grunt.option( 'verbose' ) ) {
                     grunt.log.warn();
                 } else {
-                    grunt.log.write( '*'.orange );
+                    grunt.log.write( '*'.red );
                 }
             } else {
                 grunt.verbose.ok().or.write( '.'.green );
