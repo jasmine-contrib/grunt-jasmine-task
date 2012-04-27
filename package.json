@@ -30,11 +30,10 @@
     "test": "grunt test"
   },
   "dependencies": {
-    "grunt": "~0.3.8",
     "temporary": "~0.0.2"
   },
   "devDependencies": {
-    "grunt": "~0.3.8"
+    "grunt": "~0.3.9"
   },
   "keywords": [
     "gruntplugin"
