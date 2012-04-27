@@ -27,8 +27,9 @@ function normalize(filepath) {
 // A very simple, not-at-all-efficient, synchronous file globbing util.
 exports.glob = function(pattern, options) {
   if (!options) { options = {}; }
+  var cwd = options.cwd || process.cwd();
   // The current absolute working directory.
-  var base = normalize(path.join(process.cwd(), pathSeparator));
+  var base = normalize(path.join(cwd, pathSeparator));
   // The passed pattern, resolved to an absolute path.
   var absPattern = normalize(path.resolve(base, pattern));
   // Since path.resolve strips off trailing '/', add it back if necessary.
@@ -90,7 +91,7 @@ exports.glob = function(pattern, options) {
   // that is relative to the cwd.
   if (!wasAbsolute) {
     filepaths = filepaths.map(function(filepath) {
-      var relPath = normalize(path.relative(process.cwd(), filepath));
+      var relPath = normalize(path.relative(cwd, filepath));
       if (/\/$/.test(filepath)) { relPath += '/'; }
       return relPath;
     });

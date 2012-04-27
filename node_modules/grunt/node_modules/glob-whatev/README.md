@@ -36,6 +36,7 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 
 ## Release History
 
+* 2012/04/13 - v0.1.6 - Added `options.cwd` option to allow searching from a different base directory than `process.cwd()`. Added `options.maxDepth` unit tests.
 * 2012/04/10 - v0.1.5 - Fixed an issue where using the `matchBase` minimatch option with simple patterns would fail.
 * 2012/03/26 - v0.1.4 - Fixed a minor issue with absolute paths on Windows.
 * 2012/03/25 - v0.1.3 - Updated to minimatch 0.2.2+. Minimatch is now exposed as exports.minimatch.
