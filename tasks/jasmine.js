@@ -24,7 +24,7 @@ module.exports = function ( grunt ) {
             } ).join( '\n' );
     }
 
-    // Handle methods passed from PhantomJS, including QUnit hooks.
+    // Handle methods passed from PhantomJS, including Jasmine hooks.
     var phantomHandlers = {
         begin : function(){
 
@@ -65,7 +65,7 @@ module.exports = function ( grunt ) {
         },
         done_timeout:function () {
             grunt.log.writeln();
-            grunt.warn( 'PhantomJS timed out, possibly due to a missing QUnit start() call.', 90 );
+            grunt.warn( 'PhantomJS timed out, possibly due to an unfinished async spec.', 90 );
         },
         // console.log pass-through.
         console:console.log.bind( console ),
@@ -78,6 +78,12 @@ module.exports = function ( grunt ) {
     // ==========================================================================
 
     grunt.registerMultiTask( 'jasmine', 'Run Jasmine specs in a headless PhantomJS instance.', function () {
+		var timeout = grunt.config(['jasmine', this.target, 'timeout']);
+
+		if( typeof timeout === "undefined" ){
+			timeout = 10000;
+		}
+
         // Get files as URLs.
         var urls = grunt.file.expandFileURLs( this.file.src );
 
@@ -91,6 +97,7 @@ module.exports = function ( grunt ) {
         grunt.utils.async.forEachSeries( urls, function ( url, next ) {
             var basename = path.basename( url );
             grunt.verbose.subhead( 'Running specs for ' + basename ).or.write( 'Running specs for ' + basename );
+			grunt.log.writeln();
 
             // Create temporary file to be used for grunt-phantom communication.
             var tempfile = new Tempfile();
@@ -133,6 +140,7 @@ module.exports = function ( grunt ) {
 
                 if ( done ) {
                     // All done.
+					grunt.log.writeln();
                     cleanup();
                     next();
                 } else {
@@ -153,8 +161,9 @@ module.exports = function ( grunt ) {
                     tempfile.path,
                     // The Jasmine helper file to be injected.
                     grunt.task.getFile( 'jasmine/jasmine-helper.js' ),
-                    // URL to the QUnit .html test file to run.
+                    // URL to the Jasmine .html test file to run.
                     url,
+					timeout,
                     // PhantomJS options.
                     '--config=' + grunt.task.getFile( 'jasmine/phantom-config.json' )
                 ],
@@ -167,7 +176,6 @@ module.exports = function ( grunt ) {
             } );
         }, function ( err ) {
             // All tests have been run.
-            grunt.log.writeln();
              // Log results.
              if ( status.failed > 0 ) {
                  grunt.warn( status.failed + '/' + status.total + ' assertions failed in ' + status.specs + ' specs (' +

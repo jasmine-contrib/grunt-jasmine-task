@@ -19,11 +19,14 @@ var fs = require( 'fs' );
 // The temporary file used for communications.
 var tmpfile = phantom.args[0];
 
-
 // The Jasmine helper file to be injected.
 var jasmineHelper = phantom.args[1];
+
 // The Jasmine .html specs file to run.
 var url = phantom.args[2];
+
+//in milliseconds
+var timeout = phantom.args[ 3 ];
 
 // Keep track of the last time a Jasmine message was sent.
 var last = new Date();
@@ -45,7 +48,7 @@ function sendDebugMessage() {
 
 // Abort if Jasmine doesn't do anything for a while.
 setInterval( function () {
-    if ( new Date() - last > 5000 ) {
+    if ( new Date() - last > timeout ) {
         sendMessage( ['done_timeout'] );
     }
 }, 1000 );
