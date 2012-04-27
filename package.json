@@ -1,41 +1,41 @@
 {
-  "name": "grunt-jasmine-task",
-  "description": "Grunt task for running Jasmine specs",
-  "version": "0.2.0",
-  "homepage": "https://github.com/creynders/grunt-jasmine-task",
-  "author": {
-    "name": "Camille Reynders",
-    "email": "info@creynders.be",
-    "url": "http://www.creynders.be"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/creynders/grunt-jasmine-task.git"
-  },
-  "bugs": {
-    "url": "https://github.com/creynders/grunt-jasmine-task/issues"
-  },
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "https://github.com/creynders/grunt-jasmine-task/blob/master/LICENSE-MIT"
-    }
-  ],
-  "main": "grunt.js",
-  "bin": "bin/grunt-jasmine-task",
-  "engines": {
-    "node": "*"
-  },
-  "scripts": {
-    "test": "grunt test"
-  },
-  "dependencies": {
-    "temporary": "~0.0.2"
-  },
-  "devDependencies": {
-    "grunt": "~0.3.9"
-  },
-  "keywords": [
-    "gruntplugin"
-  ]
+    "name" : "grunt-jasmine-task",
+    "description" : "Grunt task for running Jasmine specs",
+    "version" : "0.2.0",
+    "homepage" : "https://github.com/creynders/grunt-jasmine-task",
+    "author" : {
+        "name" : "Camille Reynders",
+        "email" : "info@creynders.be",
+        "url" : "http://www.creynders.be"
+    },
+    "repository" : {
+        "type" : "git",
+        "url" : "git://github.com/creynders/grunt-jasmine-task.git"
+    },
+    "bugs" : {
+        "url" : "https://github.com/creynders/grunt-jasmine-task/issues"
+    },
+    "licenses" : [
+        {
+            "type" : "MIT",
+            "url" : "https://github.com/creynders/grunt-jasmine-task/blob/master/LICENSE-MIT"
+        }
+    ],
+    "main" : "grunt.js",
+    "bin" : "bin/grunt-jasmine-task",
+    "engines" : {
+        "node" : "*"
+    },
+    "scripts" : {
+        "test" : "grunt test"
+    },
+    "dependencies" : {
+        "temporary" : "~0.0.2"
+    },
+    "devDependencies" : {
+        "grunt" : "~0.3.9"
+    },
+    "keywords" : [
+        "gruntplugin"
+    ]
 }
