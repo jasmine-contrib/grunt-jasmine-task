@@ -58,6 +58,12 @@ Now you can __run the jasmine task__ with:
 
 ```grunt jasmine```
 
+## When specs fail...
+
+By default the jasmine task outputs in non-verbose mode, meaning it will output dots for passed specs and F's for failed ones.
+You can see which spec is failing by running the task in verbose mode:  
+```grunt jasmine -v```
+
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. 
 Add unit tests for any new or changed functionality. 
