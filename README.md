@@ -9,6 +9,10 @@ Grunt task for running jasmine specs.
 __Status: stable__  
 __[!]__ Apparently there are some problems with getting this to work with PhantomJS 1.5 on both Windows and Linux (see [#2](https://github.com/creynders/grunt-jasmine-task/issues/2), [#4](https://github.com/creynders/grunt-jasmine-task/issues/4)) On Mac it works fine though.
 
+## Contact
+
+You can contact me on twitter: [@camillereynders](https://twitter.com/#!/camillereynders)
+
 ## Getting Started
 
 Make sure you got [PhantomJS](http://phantomjs.org/) installed, which is a headless browser. Unfortunately PhantomJS cannot be installed automatically through grunt. [See the grunt faq for installation instructions](https://github.com/cowboy/grunt/blob/master/docs/faq.md#why-does-grunt-complain-that-phantomjs-isnt-installed).
