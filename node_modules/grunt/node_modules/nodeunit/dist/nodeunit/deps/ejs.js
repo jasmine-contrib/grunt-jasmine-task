@@ -9,7 +9,7 @@
  * Module dependencies.
  */
 
-var sys = require('sys');
+var util = require('util');
 
 /**
  * Library version.
@@ -85,7 +85,7 @@ var parse = exports.parse = function(str){
  */
 
 var compile = exports.compile = function(str, options){
-    if (options.debug) sys.puts(parse(str));
+    if (options.debug) util.puts(parse(str));
     return new Function('locals, escape', parse(str));
 };
 
