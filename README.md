@@ -45,7 +45,7 @@ jasmine: {
 ```
 Obviously you need to replace `specs/specrunner.html` with the location of your jasmine spec running html file.
 
-__Since v0.2.1: `errorReporting` config option.__
+__Since v0.2.1: `errorReporting` config option.__ <a name="error-reporting" href="#error-reporting" title="Link to this section">⚑</a>
 
 When `errorReporting` is `true` the failing spec description will be outputted to the console, even when run in non-verbose mode.
 ```javascript
@@ -79,6 +79,7 @@ Now you can __run the jasmine task__ with:
 By default the jasmine task outputs in non-verbose mode, meaning it will output dots for passed specs and F's for failed ones.
 You can see which spec is failing by running the task in verbose mode:  
 ```grunt jasmine -v```
+or (since v0.2.1) you can turn on reporting for failing specs even in non-verbose mode, see [errorReporting config option](#error-reporting)
 
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. 
