@@ -182,7 +182,7 @@ module.exports = function( grunt ){
                                 status.duration + 'ms)', Math.min( 99, 90 + status.failed ) );
             }else if( status.skipped > 0 ){
                 grunt.warn( status.skipped + '/' + status.total + ' assertions skipped in ' + status.specs + ' specs (' +
-                                status.duration + 'ms)', Math.min( 99, 90 + status.failed ) );
+                                status.duration + 'ms)', Math.min( 99, 90 + status.skipped ) );
             }else{
                 grunt.verbose.writeln();
                 grunt.log.ok( status.total + ' assertions passed in ' + status.specs + ' specs (' + status.duration + 'ms)' );
