@@ -45,7 +45,19 @@ jasmine: {
 ```
 Obviously you need to replace `specs/specrunner.html` with the location of your jasmine spec running html file.
 
-__Since v0.2.0 you can also define a timeout.__ 
+__Since v0.2.1: `errorReporting` config option.__
+
+When `errorReporting` is `true` the failing spec description will be outputted to the console, even when run in non-verbose mode.
+```javascript
+jasmine: {
+  all: {
+    src:['specs/specrunner.html'],
+    errorReporting: true
+  }
+},
+```
+
+__Since v0.2.0: `timeout` config option.__ 
 By default the task will fail after 10 seconds of inactivity, however you can override this if you want:
 
 ```javascript
@@ -77,6 +89,7 @@ More info on creating grunt plugins
 
 ## Release History
 
+* v0.2.1: added `errorReporting` configuration option
 * v0.2.0: added `timeout` configuration option
 * v0.1.1: stable
 * v0.1.0: broken
