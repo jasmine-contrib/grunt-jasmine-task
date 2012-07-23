@@ -6,31 +6,67 @@
 
 Grunt task for running jasmine specs.
 
-__Status: stable__
+__Status: stable__  
+__[!]__ Apparently there are some problems with getting this to work with PhantomJS 1.5 on both Windows and Linux (see [#2](https://github.com/creynders/grunt-jasmine-task/issues/2), [#4](https://github.com/creynders/grunt-jasmine-task/issues/4)) On Mac it works fine though.
+
+## Contact
+
+You can contact me on twitter: [@camillereynders](https://twitter.com/#!/camillereynders)
 
 ## Getting Started
 
-Install this grunt plugin next to your project's [grunt.js gruntfile][getting_started] with: `npm install grunt-jasmine-task`
+Make sure you got [PhantomJS](http://phantomjs.org/) installed, which is a headless browser. Unfortunately PhantomJS cannot be installed automatically through grunt. [See the grunt faq for installation instructions](https://github.com/cowboy/grunt/blob/master/docs/faq.md#why-does-grunt-complain-that-phantomjs-isnt-installed).
+
+__Install this grunt plugin__ next to your project's [grunt.js gruntfile][getting_started] with: `npm install grunt-jasmine-task`
 
 (ie. the plugin is installed locally. If you want to install it globally - which is not recommended - check out the official [grunt documentation][plugin_docs])
 
-Then add this line to your project's `grunt.js` gruntfile at the bottom:
+__You also need to install the `temporary` module__
+
+Although it is marked as a dependency in the `grunt-jasmine-task` module and automatically is installed together with the jasmine plugin, for some reason it cannot be found, therefore it needs to be installed separately, either as a global or local module.
+
+To install it locally do:
+`npm install temporary`
+
+Then __add this line__ to your project's `grunt.js` gruntfile at the bottom:
 
 ```javascript
 grunt.loadNpmTasks('grunt-jasmine-task');
 ```
 
-Also add this to the ```grunt.initConfig``` object in the same file:
+Next you need to __create (a) target(s)__ for the jasmine task.
+
+If you want to run one file just add this to the `grunt.initConfig` object 
 
 ```javascript
 jasmine: {
-  index: ['specs/index.html']
+  all: ['specs/specrunner.html']
 },
 ```
-Obviously you need to replace ```specs/index.html``` with the location of your jasmine spec running html file.
-Now you can run the jasmine task with:
+Obviously you need to replace `specs/specrunner.html` with the location of your jasmine spec running html file.
+
+__Since v0.2.0 you can also define a timeout.__ 
+By default the task will fail after 10 seconds of inactivity, however you can override this if you want:
+
+```javascript
+jasmine: {
+  all: {
+    src:['specs/specrunner.html'],
+    timeout: 20000 //in milliseconds
+  }
+},
+```
+This is useful for async assertions that may require more than 10 seconds to run.
+
+Now you can __run the jasmine task__ with:
 
 ```grunt jasmine```
+
+## When specs fail...
+
+By default the jasmine task outputs in non-verbose mode, meaning it will output dots for passed specs and F's for failed ones.
+You can see which spec is failing by running the task in verbose mode:  
+```grunt jasmine -v```
 
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. 
@@ -41,6 +77,7 @@ More info on creating grunt plugins
 
 ## Release History
 
+* v0.2.0: added `timeout` configuration option
 * v0.1.1: stable
 * v0.1.0: broken
 
