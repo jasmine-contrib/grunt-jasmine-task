@@ -15,6 +15,7 @@ module.exports = function( grunt ){
     var Tempfile = require( 'temporary/lib/file' );
 
     var status;
+    var errorReporting = false;
 
     // Allow an error message to retain its color when split across multiple lines.
     function formatMessage( str ){
@@ -35,23 +36,30 @@ module.exports = function( grunt ){
             status.passed += passedAssertions;
             status.total += totalAssertions;
             status.skipped += skippedAssertions;
-            grunt.verbose.write( suite + ' : ' + name + '...' );
-            // Log errors if necessary, otherwise success.
-            if( failedAssertions > 0 ){
-                // list assertions
-                if( grunt.option( 'verbose' ) ){
+            
+            var testName = suite + ' : ' + name + '...';
+            if( grunt.option( 'verbose' ) ){
+	            grunt.log.write( testName );
+	            if( failedAssertions > 0 ){
                     grunt.log.error();
-                }else{
-                    grunt.log.write( 'F'.red );
-                }
-            }else if( skippedAssertions > 0 ){
-                if( grunt.option( 'verbose' ) ){
+	            }else if( skippedAssertions > 0 ){
                     grunt.log.warn();
-                }else{
-                    grunt.log.write( '*'.red );
-                }
+	            }else{
+	            	grunt.log.ok();
+	            }
             }else{
-                grunt.verbose.ok().or.write( '.'.green );
+	            if( failedAssertions > 0 ){
+	            	if( errorReporting ){
+			            grunt.log.write( testName.red );
+			            grunt.log.error();
+	            	}else{
+	                    grunt.log.write( 'F'.red );
+	                }
+	            }else if( skippedAssertions > 0 ){
+                    grunt.log.write( '*'.red );
+	            }else{
+	            	grunt.log.write( '.'.green );
+	            }
             }
         },
         done : function( elapsed ){
@@ -79,10 +87,11 @@ module.exports = function( grunt ){
 
     grunt.registerMultiTask( 'jasmine', 'Run Jasmine specs in a headless PhantomJS instance.', function(){
         var timeout = grunt.config( ['jasmine', this.target, 'timeout'] );
-
         if( typeof timeout === "undefined" ){
             timeout = 10000;
         }
+        
+        errorReporting = !!grunt.config( [ 'jasmine', this.target, 'errorReporting' ] );
 
         // Get files as URLs.
         var urls = grunt.file.expandFileURLs( this.file.src );
