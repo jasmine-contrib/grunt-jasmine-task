@@ -30,7 +30,6 @@
         "test" : "grunt test"
     },
     "dependencies" : {
-        "grunt" : "~0.3.9",
         "temporary" : "~0.0.2"
     },
     "devDependencies" : {
