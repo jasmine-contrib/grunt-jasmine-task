@@ -51,4 +51,6 @@ GruntReporter.prototype = {
     }
 };
 
-jasmine.getEnv().addReporter( new GruntReporter() );
+if(/phantom/i.test(navigator.userAgent)) {
+    jasmine.getEnv().addReporter( new GruntReporter() );
+}
