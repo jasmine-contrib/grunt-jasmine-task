@@ -36,7 +36,7 @@ module.exports = function( grunt ){
             status.passed += passedAssertions;
             status.total += totalAssertions;
             status.skipped += skippedAssertions;
-            
+
             var testName = suite + ' : ' + name + '...';
             if( grunt.option( 'verbose' ) ){
 	            grunt.log.write( testName );
@@ -58,12 +58,16 @@ module.exports = function( grunt ){
 	            }else if( skippedAssertions > 0 ){
                     grunt.log.write( '*'.red );
 	            }else{
-	            	grunt.log.write( '.'.green );
+	            	//grunt.log.write( '.'.green );
 	            }
             }
         },
         done : function( elapsed ){
             status.duration = elapsed;
+        },
+        junit : function( filename, xml ){
+          grunt.file.mkdir('output');
+          grunt.file.write('output/' + filename, xml);
         },
         // Error handlers.
         done_fail : function( url ){
