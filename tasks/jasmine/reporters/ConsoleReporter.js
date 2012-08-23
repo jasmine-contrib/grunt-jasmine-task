@@ -18,7 +18,7 @@
   function ConsoleReporter() {
     this.started = false;
     this.finished = false;
-  };
+  }
 
   ConsoleReporter.prototype = {
     reportRunnerResults: function(runner) {
