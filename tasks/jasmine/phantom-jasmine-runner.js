@@ -74,11 +74,11 @@ page.onResourceRequested = function( request ){
         // the test page (including jasmine.js) had to be re-requested.
         injected = false;
     }
-    sendDebugMessage( 'onResourceRequested', request.url );
+    sendDebugMessage( 'onResourceRequested', request.method + ' ' + request.url );
 };
 page.onResourceReceived = function( request ){
     if( request.stage === 'end' ){
-        sendDebugMessage( 'onResourceReceived', request.url );
+        sendDebugMessage( 'onResourceRequested', request.method + ' ' + request.url );
     }
 };
 
