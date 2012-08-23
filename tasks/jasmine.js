@@ -164,6 +164,8 @@ module.exports = function( grunt ){
             grunt.helper( 'phantomjs', {
                 code : 90,
                 args : [
+                    // PhantomJS options.
+                    '--config=' + grunt.task.getFile( 'jasmine/phantom-config.json' ),
                     // The main script file.
                     grunt.task.getFile( 'jasmine/phantom-jasmine-runner.js' ),
                     // The temporary file used for communications.
@@ -172,9 +174,7 @@ module.exports = function( grunt ){
                     grunt.task.getFile( 'jasmine/jasmine-helper.js' ),
                     // URL to the Jasmine .html test file to run.
                     url,
-                    timeout,
-                    // PhantomJS options.
-                    '--config=' + grunt.task.getFile( 'jasmine/phantom-config.json' )
+                    timeout
                 ],
                 done : function( err ){
                     if( err ){
