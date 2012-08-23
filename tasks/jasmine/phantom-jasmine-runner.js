@@ -14,91 +14,110 @@
  2 -> spec html file
  */
 
-var fs = require( 'fs' );
+(function(){
+  "use strict";
 
-// The temporary file used for communications.
-var tmpfile = phantom.args[0];
+  var fs = require( 'fs' );
 
-// The Jasmine helper file to be injected.
-var jasmineHelper = phantom.args[1];
+  // The temporary file used for communications.
+  var args = Array.prototype.slice.call(phantom.args);
+  var tmpfile = args.shift();
 
-// The Jasmine .html specs file to run.
-var url = phantom.args[2];
+  // The Jasmine .html specs file to run.
+  var url = args.shift();
 
-//in milliseconds
-var timeout = phantom.args[ 3 ];
+  //in milliseconds
+  var timeout = args.shift();
 
-// Keep track of the last time a Jasmine message was sent.
-var last = new Date();
+  // The Jasmine helper file to be injected.
+  var helpers = args;
 
-// Messages are sent to the parent by appending them to the tempfile.
-function sendMessage( args ){
+  // Keep track of the last time a Jasmine message was sent.
+  var last = new Date();
+
+  // Messages are sent to the parent by appending them to the tempfile.
+  function sendMessage( args ){
     last = new Date();
     fs.write( tmpfile, JSON.stringify( args ) + '\n', 'a' );
     // Exit when all done.
     if( /^done/.test( args[0] ) ){
-        phantom.exit();
+      phantom.exit();
     }
-}
+  }
 
-// Send a debugging message.
-function sendDebugMessage(){
+  // Send a debugging message.
+  function sendDebugMessage(){
     sendMessage( ['debug'].concat( [].slice.call( arguments ) ) );
-}
+  }
 
-// Abort if Jasmine doesn't do anything for a while.
-setInterval( function(){
+  // Abort if Jasmine doesn't do anything for a while.
+  setInterval( function(){
     if( new Date() - last > timeout ){
-        sendMessage( ['done_timeout'] );
+      sendMessage( ['done_timeout'] );
     }
-}, 1000 );
+  }, 1000 );
 
-// Create a new page.
-var page = require( 'webpage' ).create();
+  // Create a new page.
+  var page = require( 'webpage' ).create();
 
-// Jasmine sends its messages via alert(jsonstring);
-page.onAlert = function( args ){
+  // Jasmine sends its messages via alert(jsonstring);
+  page.onAlert = function( args ){
     sendMessage( JSON.parse( args ) );
-};
+  };
 
-// Keep track if Jasmine has been injected already.
-var injected;
+  // Keep track if Jasmine has been injected already.
+  var injected;
 
-// Additional message sending
-page.onConsoleMessage = function( message ){
+  // Additional message sending
+  page.onConsoleMessage = function( message ){
     sendMessage( ['console', message] );
-};
-page.onResourceRequested = function( request ){
+  };
+  page.onResourceRequested = function( request ){
     if( /\/jasmine\.js$/.test( request.url ) ){
-        // Reset injected to false, if for some reason a redirect occurred and
-        // the test page (including jasmine.js) had to be re-requested.
-        injected = false;
+      // Reset injected to false, if for some reason a redirect occurred and
+      // the test page (including jasmine.js) had to be re-requested.
+      injected = false;
     }
-    sendDebugMessage( 'onResourceRequested', request.method + ' ' + request.url );
-};
-page.onResourceReceived = function( request ){
+    var method = request.method || 'GET';
+    sendDebugMessage( 'onResourceRequested', method + ' ' + request.url );
+  };
+  page.onResourceReceived = function( request ){
     if( request.stage === 'end' ){
-        sendDebugMessage( 'onResourceRequested', request.method + ' ' + request.url );
+      var method = request.method || 'GET';
+      sendDebugMessage( 'onResourceRequested', method + ' ' + request.url );
     }
-};
+  };
 
+  page.onError = function(msg, trace) {
+    sendMessage(['error',msg]);
+    var buffer = '';
+    trace.forEach(function(line){
+      buffer += ' > ' + line.file + ':' + line.line + (line.function ? 'in ' + line.function + '()' : '') + "\n";
+    });
+    sendMessage(['error',buffer]);
+  };
 
-page.open( url, function( status ){
+  page.open( url, function( status ){
     // Only execute this code if Jasmine has not yet been injected.
     if( injected ){
-        return;
+      return;
     }
     injected = true;
     // The window has loaded.
     if( status !== 'success' ){
-        // File loading failure.
-        sendMessage( ['done_fail', url] );
+      // File loading failure.
+      sendMessage( ['done_fail', url] );
     }else{
-        // Inject Jasmine helper file.
-        sendDebugMessage( 'inject', jasmineHelper );
-        page.injectJs( jasmineHelper );
-        // Because injection happens after window load, "begin" must be sent
-        // manually.
-        sendMessage( ['begin'] );
+      // Inject Jasmine helper file.
+      helpers.forEach(function(val){
+        sendDebugMessage( 'inject', val );
+        page.injectJs( val );
+      });
+      // Because injection happens after window load, "begin" must be sent
+      // manually.
+      sendMessage( ['begin'] );
     }
-} );
+  } );
+
+}());
+
