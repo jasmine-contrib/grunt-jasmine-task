@@ -66,12 +66,13 @@ module.exports = function (grunt) {
   // ==========================================================================
 
   grunt.registerMultiTask('jasmine', 'Run Jasmine specs in a headless PhantomJS instance.', function () {
-    var timeout = grunt.config(['jasmine', this.target, 'timeout']);
+    var config = grunt.config(['jasmine', this.target]);
+    var timeout = config.timeout;
     if (typeof timeout === "undefined") {
       timeout = 10000;
     }
 
-    errorReporting = !!grunt.config(['jasmine', this.target, 'errorReporting']);
+    errorReporting = !!config.errorReporting;
 
     var urls = grunt.file.expandFileURLs(this.file.src);
 
