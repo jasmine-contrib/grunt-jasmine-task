@@ -1,3 +1,4 @@
+[![build status](https://secure.travis-ci.org/creynders/grunt-jasmine-task.png)](http://travis-ci.org/creynders/grunt-jasmine-task)
 [grunt]: https://github.com/cowboy/grunt
 [getting_started]: https://github.com/cowboy/grunt/blob/master/docs/getting_started.md
 [plugin_docs]: https://github.com/cowboy/grunt/blob/master/docs/plugins.md
