@@ -84,7 +84,7 @@
   page.onResourceReceived = function( request ){
     if( request.stage === 'end' ){
       var method = request.method || 'GET';
-      sendDebugMessage( 'onResourceRequested', method + ' ' + request.url );
+      sendDebugMessage( 'onResourceReceived', method + ' ' + request.url );
     }
   };
 
