@@ -7,9 +7,11 @@
 
 /*jshint node:true*/
 
+
 module.exports = function (grunt) {
   "use strict";
 
+  var phantomjs = require('./lib/phantomjs').init(grunt);
   // Nodejs libs.
   var fs = require('fs');
   var path = require('path');
@@ -20,183 +22,120 @@ module.exports = function (grunt) {
   var status;
   var errorReporting = false;
 
-  // Handle methods passed from PhantomJS, including Jasmine hooks.
-  var phantomHandlers = {
-    begin        : function () {},
-    testDone     : function (totalAssertions, passedAssertions, failedAssertions, skippedAssertions) {
-      status.specs++;
-      status.failed += failedAssertions;
-      status.passed += passedAssertions;
-      status.total += totalAssertions;
-      status.skipped += skippedAssertions;
-    },
-    done : function (elapsed) {
-      status.duration = elapsed;
-    },
-    file        : function (type,filename, xml) {
-      if (type === 'junit') {
-        grunt.file.mkdir('output');
-        grunt.file.write('output/' + filename, xml);
-      }
-    },
-    write : function(str) {
-      grunt.log.write.apply(grunt.log,arguments);
-    },
-    writeln : function(str) {
-      grunt.log.writeln.apply(grunt.log,arguments);
-    },
-    error        : function(string) {
-      grunt.log.writeln(string.red);
-    },
-    done_fail    : function (url) {
-      grunt.verbose.write('Running PhantomJS...').or.write('...');
-      grunt.log.error();
-      grunt.warn('PhantomJS unable to load "' + url + '" URI.', 90);
-    },
-    done_timeout : function () {
-      grunt.log.writeln();
-      grunt.warn('PhantomJS timed out, possibly due to an unfinished async spec.', 90);
-    },
-    console      : console.log.bind(console),
-    debug        : grunt.log.debug.bind(grunt.log, 'phantomjs')
-  };
+  phantomjs.on('jasmine.begin',function(){
+
+  });
+
+  phantomjs.on('jasmine.testDone',function(totalAssertions, passedAssertions, failedAssertions, skippedAssertions){
+    status.specs++;
+    status.failed += failedAssertions;
+    status.passed += passedAssertions;
+    status.total += totalAssertions;
+    status.skipped += skippedAssertions;
+  });
+
+  phantomjs.on('jasmine.done',function(elapsed){
+    phantomjs.halt();
+    status.duration = elapsed;
+  });
+
+  phantomjs.on('jasmine.done.ConsoleReporter',function(elapsed){
+    phantomjs.emit('jasmine.done');
+  });
+
+  phantomjs.on('file',function(type,filename, xml){
+    if (type === 'junit') {
+      grunt.file.mkdir('output');
+      grunt.file.write('output/' + filename, xml);
+    }
+  });
+
+  phantomjs.on('jasmine.done_fail',function(url){
+    grunt.verbose.write('Running PhantomJS...').or.write('...');
+    grunt.log.error();
+    grunt.warn('PhantomJS unable to load "' + url + '" URI.', 90);
+  });
+  phantomjs.on('fail.timeout',function(){
+    grunt.log.writeln();
+    grunt.warn('PhantomJS timed out, possibly due to an unfinished async spec.', 90);
+  });
+  phantomjs.on('console',console.log.bind(console));
+  phantomjs.on('debug',grunt.log.debug.bind(grunt.log, 'phantomjs'));
+  phantomjs.on('write', grunt.log.write.bind(grunt.log));
+  phantomjs.on('write', grunt.log.writeln.bind(grunt.log));
+  phantomjs.on('error',function(string){
+    grunt.log.writeln(string.red);
+  });
+
+  false && phantomjs.on('*',function(){
+    grunt.log.writeln("Event : ".yellow);
+    grunt.log.debug(Array.prototype.slice.call(arguments));
+    grunt.log.writeln("----".yellow);
+  });
+  phantomjs.on('jasmine.',function(){});
+
+  phantomjs.on('jasmine.*', function() {
+    var args = [this.event].concat(grunt.util.toArray(arguments));
+    // grunt 0.4.0
+    // grunt.event.emit.apply(grunt.event, args);
+  });
 
   // ==========================================================================
   // TASKS
   // ==========================================================================
 
-  grunt.registerMultiTask('jasmine', 'Run Jasmine specs in a headless PhantomJS instance.', function () {
-    var config = grunt.config(['jasmine', this.target]);
-    var timeout = config.timeout;
-    if (typeof timeout === "undefined") {
-      timeout = 10000;
-    }
+  var defaultOptions = {
+    timeout: 10000,
+    inject: [
+      grunt.task.getFile('jasmine/phantom-helper.js'),
+      grunt.task.getFile('jasmine/reporters/ConsoleReporter.js'),
+      grunt.task.getFile('jasmine/reporters/JUnitReporter.js'),
+      grunt.task.getFile('jasmine/jasmine-helper.js')
+    ],
+    '--config': grunt.task.getFile('lib/phantomjs/phantom-config.json')
+  };
 
-    errorReporting = !!config.errorReporting;
+  // delete for 0.4.0
+  grunt.util = grunt.utils;
+
+  grunt.registerMultiTask('jasmine', 'Run jasmineunit tests in a headless PhantomJS instance.', function() {
+    var options = grunt.config(['jasmine', this.target]);
+    // Merge task-specific and/or target-specific options with these defaults.
+    options = grunt.util._.extend({},defaultOptions,options);
+    var _options = false && this.options(defaultOptions);
 
     var urls = grunt.file.expandFileURLs(this.file.src);
 
-    // This task is asynchronous.
     var done = this.async();
 
-    // Reset status.
-    status = {failed : 0, passed : 0, total : 0, skipped : 0, specs : 0, duration : 0};
+    status = {failed: 0, passed: 0, total: 0, duration: 0};
 
     // Process each filepath in-order.
-    grunt.utils.async.forEachSeries(urls, function (url, next) {
-      var basename = path.basename(url);
-      grunt.verbose.subhead('Running specs for ' + basename).or.write('Running specs for ' + basename);
-      grunt.log.writeln();
+    grunt.util.async.forEachSeries(urls, function(url, next) {
+        var basename = path.basename(url);
+        grunt.verbose.subhead('Testing ' + basename).or.write('Testing ' + basename);
 
-      // Create temporary file to be used for grunt-phantom communication.
-      var tempfile = new Tempfile();
-      var timeoutId;
-      var linesRead = 0;
-
-      function cleanup() {
-        clearTimeout(timeoutId);
-        tempfile.unlink();
-      }
-
-      // As Jasmine tests, assertions and modules begin and complete,
-      // the results are written as JSON to a temporary file. This polling loop
-      // checks that file for new lines, and for each one parses its JSON and
-      // executes the corresponding method with the specified arguments.
-      (function communicationLoop() {
-
-        grunt.log.muted = true;
-        var lines = grunt.file.read(tempfile.path).split('\n').slice(0, -1);
-        grunt.log.muted = false;
-
-        // Iterate over all lines that haven't already been processed.
-        var done = lines.slice(linesRead).some(function (line) {
-          var args = JSON.parse(line);
-          var method = args.shift();
-
-          if (phantomHandlers[method]) phantomHandlers[method].apply(null, args);
-
-          // return true and stop iterating if method starts with done
-          return (/^done/).test(method);
-        });
-
-        if (done) {
-          grunt.log.writeln();
-          cleanup();
-          next();
-        } else {
-          linesRead = lines.length;
-          timeoutId = setTimeout(communicationLoop, 100);
-        }
-      }());
-
-      grunt.helper('phantomjs', {
-        code : 90,
-        args : [
-          '--config=' + grunt.task.getFile('jasmine/phantom-config.json'),
-
-          grunt.task.getFile('jasmine/phantom-jasmine-runner.js'),
-
-          tempfile.path,    // The temporary file used for communication.
-          url,              // URL to the Jasmine .html test file to run.
-          timeout,          // timeout before failure
-
-          // Helper files
-          grunt.task.getFile('jasmine/phantom-helper.js'),
-          grunt.task.getFile('jasmine/reporters/ConsoleReporter.js'),
-          grunt.task.getFile('jasmine/reporters/JUnitReporter.js'),
-          grunt.task.getFile('jasmine/jasmine-helper.js')
-        ],
-        done : function (err) {
-          if (err) {
-            cleanup();
-            done();
+        // Launch PhantomJS.
+        phantomjs.spawn(url, {
+          // Exit code to use if PhantomJS fails in an uncatchable way.
+          failCode: 90,
+          options: options,
+          done: function(err) {
+            if (err) return done();
+            next();
           }
+        });
+      },
+      function(err) {
+        if (status.failed > 0) {
+          grunt.warn(status.failed + '/' + status.total + ' assertions failed (' +
+            status.duration + 'ms)', Math.min(99, 90 + status.failed));
+        } else {
+          grunt.verbose.writeln();
+          grunt.log.ok(status.total + ' assertions passed (' + status.duration + 'ms)');
         }
+        // All done!
+        done();
       });
-    }, function (err) {
-      // All tests have been run.
-      // Log results.
-      if (status.failed > 0) {
-        grunt.warn(status.failed + '/' + status.total + ' assertions failed in ' + status.specs + ' specs.', Math.min(99, 90 + status.failed));
-      } else if (status.skipped > 0) {
-        grunt.warn(status.skipped + '/' + status.total + ' assertions skipped in ' + status.specs + ' specs.', Math.min(99, 90 + status.skipped));
-      } else {
-        grunt.verbose.writeln();
-        grunt.log.ok(status.total + ' assertions passed in ' + status.specs + ' specs.');
-      }
-
-      done();
-    });
   });
-
-  // ==========================================================================
-  // HELPERS
-  // ==========================================================================
-
-  grunt.registerHelper('phantomjs', function (options) {
-    return grunt.utils.spawn({ cmd : 'phantomjs', args : options.args }, function (err, result, code) {
-      if (!err) {
-        return options.done(null);
-      }
-      // Something went horribly wrong.
-      grunt.verbose.or.writeln();
-      grunt.log.write('Running PhantomJS...').error();
-      if (code === 127) {
-        grunt.log.errorlns(
-          'In order for this task to work properly, PhantomJS must be ' +
-            'installed and in the system PATH (if you can run "phantomjs" at' +
-            ' the command line, this task should work). Unfortunately, ' +
-            'PhantomJS cannot be installed automatically via npm or grunt. ' +
-            'See the grunt FAQ for PhantomJS installation instructions: ' +
-            'https://github.com/cowboy/grunt/blob/master/docs/faq.md'
-        );
-        grunt.warn('PhantomJS not found.', options.code);
-      } else {
-        result.split('\n').forEach(grunt.log.error, grunt.log);
-        grunt.warn('PhantomJS exited unexpectedly with exit code ' + code + '.', options.code);
-      }
-      options.done(code);
-    });
-  });
-
 };

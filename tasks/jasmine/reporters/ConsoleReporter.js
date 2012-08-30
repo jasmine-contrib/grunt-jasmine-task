@@ -30,7 +30,7 @@
       this.log("Runner Finished.");
       this.log(spec_str + fail_str + (dur/1000) + "s.");
       this.finished = true;
-      phantom.sendMessage( 'done' );
+      phantom.sendMessage( 'jasmine.done.ConsoleReporter' );
     },
     reportRunnerStarting: function(runner) {
       this.started = true;
@@ -65,7 +65,7 @@
         }
       }
 
-      phantom.sendMessage( 'testDone', results.totalCount, results.passedCount, results.failedCount, results.skipped );
+      phantom.sendMessage( 'jasmine.testDone', results.totalCount, results.passedCount, results.failedCount, results.skipped );
     },
 
     reportSpecStarting: function(spec) {

@@ -134,6 +134,7 @@
       }
       // When all done, make it known on JUnitXmlReporter
       JUnitXmlReporter.finished_at = (new Date()).getTime();
+      phantom.sendMessage('jasmine.done.JUnitReporter');
     },
 
     getNestedOutput: function(suite) {
@@ -145,7 +146,7 @@
     },
 
     writeFile: function(filename, text) {
-      phantom.sendMessage('junit',filename,text);
+      phantom.sendMessage('file','junit',filename,text);
     },
 
     getFullName: function(suite, isFilename) {
