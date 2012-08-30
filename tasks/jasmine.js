@@ -62,7 +62,7 @@ module.exports = function (grunt) {
   phantomjs.on('console',console.log.bind(console));
   phantomjs.on('debug',grunt.log.debug.bind(grunt.log, 'phantomjs'));
   phantomjs.on('write', grunt.log.write.bind(grunt.log));
-  phantomjs.on('write', grunt.log.writeln.bind(grunt.log));
+  phantomjs.on('writeln', grunt.log.writeln.bind(grunt.log));
   phantomjs.on('error',function(string){
     grunt.log.writeln(string.red);
   });
