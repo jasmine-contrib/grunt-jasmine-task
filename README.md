@@ -47,6 +47,11 @@ After successful configuration, you can run your tests with :
 
 ```grunt jasmine```
 
+## Example configuration
+
+Here is an [example grunt jasmine configuration](https://github.com/jsoverson/grunt-jasmine-runner-example) based off the
+ Pivotal Labs example app.
+
 ## Release History
 
 * v0.5.2: Expanded to some more use cases.
