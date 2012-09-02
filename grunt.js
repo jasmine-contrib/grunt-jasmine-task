@@ -9,8 +9,8 @@ module.exports = function(grunt) {
       files: ['grunt.js', 'tasks/**/*.js']
     },
     watch: {
-      files: '<config:jasmine.specs>',
-      tasks: 'jasmine-server'
+      files: ['<config:jasmine.specs>','grunt.js','tasks/**/*js'],
+      tasks: 'jasmine'
     },
     jasmine : {
       specs : 'spec/**/*.js'
