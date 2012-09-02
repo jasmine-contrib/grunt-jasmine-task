@@ -15,7 +15,6 @@ var fs = require('fs'),
     open = require('open');
 
 var grunt, phantomjs;
-// delete for 0.4.0
 
 var baseDir = '.';
 var tmpRunner = '_SpecRunner.html';
@@ -35,13 +34,11 @@ module.exports = function(g){
   phantomjs = require('./lib/phantomjs').init(grunt);
 
   grunt.registerTask('jasmine', 'Run jasmine specs headlessly through PhantomJS.', function() {
-    var done   = this.async();
-
     options = grunt.config('jasmine');
 
     var done = this.async();
 
-    grunt.helper('jasmine-phantom-runner', options, function(err,status) {
+    grunt.helper('jasmine-phantom-runner', options, function(err) {
       if (err) grunt.log.error(err);
       done(!err);
     });
@@ -96,7 +93,7 @@ module.exports = function(g){
     grunt.helper('jasmine-build-specrunner', baseDir, options, []);
     grunt.helper('static-server', baseDir, port);
     open(url)
-
+    cb();
   });
 
   grunt.registerHelper('jasmine-build-specrunner', function(dir, options, reporters){
@@ -240,7 +237,7 @@ function setupTestListeners(options,numReporters, doneCallback) {
   });
 
   var reportersDone = 0;
-  phantomjs.on('jasmine.done.*',function(elapsed){
+  phantomjs.on('jasmine.done.*',function(){
     reportersDone++;
     if (reportersDone === numReporters) phantomjs.emit('jasmine.done');
   });
