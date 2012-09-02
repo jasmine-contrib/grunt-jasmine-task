@@ -11,4 +11,15 @@ jasmineEnv.specFilter = function(spec) {
 };
 */
 
-jasmineEnv.execute();
+var currentWindowOnload = window.onload;
+
+window.onload = function() {
+  if (currentWindowOnload) {
+    currentWindowOnload();
+  }
+  execJasmine();
+};
+
+function execJasmine() {
+  jasmineEnv.execute();
+}
