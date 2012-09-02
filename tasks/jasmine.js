@@ -12,18 +12,13 @@ var fs = require('fs'),
     path = require('path'),
     connect = require('connect'),
     URL = require('url'),
-    open = require('open'),
-    grunt = require('grunt'),
-    phantomjs = require('./lib/phantomjs').init(grunt);
+    open = require('open');
 
+var grunt, phantomjs;
 // delete for 0.4.0
-grunt.util = grunt.utils;
 
-module.exports = {};
-
-
-var tmpDir = './_tmp';
-var specRunnerTemplate = grunt.task.getFile('../jasmine/SpecRunner.tmpl');
+var baseDir = '.';
+var tmpRunner = '_SpecRunner.html';
 
 var options, defaultOptions = {
   timeout : 10000,
@@ -33,109 +28,152 @@ var options, defaultOptions = {
   phantomjs : {}
 };
 
-grunt.registerTask('jasmine', 'Run jasmine specs headlessly through PhantomJS.', function() {
-  var done   = this.async();
 
-  options = grunt.config('jasmine');
+module.exports = function(g){
+  grunt = g;
+  grunt.util = grunt.utils;
+  phantomjs = require('./lib/phantomjs').init(grunt);
 
-  var done = this.async();
+  grunt.registerTask('jasmine', 'Run jasmine specs headlessly through PhantomJS.', function() {
+    var done   = this.async();
 
-  grunt.helper('jasmine-phantom-runner', options, function(err,status) {
-    if (err) grunt.log.error(err);
-    done(!err);
+    options = grunt.config('jasmine');
+
+    var done = this.async();
+
+    grunt.helper('jasmine-phantom-runner', options, function(err,status) {
+      if (err) grunt.log.error(err);
+      done(!err);
+    });
+
   });
 
-});
-
-// Convenience/test task. Never finishes and needs to be closes with ^C
-// Used to troubleshoot jasmine tasks outside of phantomjs
-grunt.registerTask('jasmine-server', 'Run jasmine specs headlessly through PhantomJS.', function() {
-  var done   = this.async();
-  grunt.helper('jasmine-interactive-runner', grunt.config('jasmine'));
-});
-
-grunt.registerHelper('jasmine-phantom-runner',function(options,cb){
-  options = grunt.util._.extend({},defaultOptions,options);
-
-  var tmp = path.join(tmpDir),
-    phantomReporters = [
-      grunt.task.getFile('jasmine/reporters/ConsoleReporter.js'),
-      grunt.task.getFile('jasmine/reporters/JUnitReporter.js')
-    ],
-    port = (options.server && options.server.port) || 8888;
-
-  var url = URL.format({
-    protocol : 'http',
-    hostname : '127.0.0.1',
-    port : port + '',
-    pathname : path.join(tmp,'SpecRunner.html')
+  // Convenience/test task. Never finishes and needs to be closes with ^C
+  // Used to troubleshoot jasmine tasks outside of phantomjs
+  grunt.registerTask('jasmine-server', 'Run jasmine specs headlessly through PhantomJS.', function() {
+    var done   = this.async();
+    grunt.helper('jasmine-interactive-runner', grunt.config('jasmine'));
   });
 
-  grunt.verbose.subhead('Testing jasmine specs via phantom').or.writeln('Testing jasmine specs via phantom');
-  grunt.helper('jasmine-build-specrunner', tmp, options, phantomReporters);
-  var server = grunt.helper('static-server', '.', port);
+  grunt.registerHelper('jasmine-phantom-runner',function(options,cb){
+    options = grunt.util._.extend({},defaultOptions,options);
 
-  runPhantom(url,options,phantomReporters.length,function(err,status){
-    server.close();
-    cb(err,status)
+    var phantomReporters = [
+        grunt.task.getFile('jasmine/reporters/ConsoleReporter.js'),
+        grunt.task.getFile('jasmine/reporters/JUnitReporter.js')
+      ],
+      port = (options.server && options.server.port) || 8888;
+
+    var url = URL.format({
+      protocol : 'http',
+      hostname : '127.0.0.1',
+      port : port + '',
+      pathname : path.join(baseDir,tmpRunner)
+    });
+
+    grunt.verbose.subhead('Testing jasmine specs via phantom').or.writeln('Testing jasmine specs via phantom');
+    grunt.helper('jasmine-build-specrunner', baseDir, options, phantomReporters);
+    var server = grunt.helper('static-server', baseDir, port);
+
+    runPhantom(url,options,phantomReporters.length,function(err,status){
+      server.close();
+      cb(err,status)
+    });
   });
-});
 
-grunt.registerHelper('jasmine-interactive-runner',function(options,cb){
-  options = grunt.util._.extend({},defaultOptions,options);
+  grunt.registerHelper('jasmine-interactive-runner',function(options,cb){
+    options = grunt.util._.extend({},defaultOptions,options);
 
-  var tmp = path.join(tmpDir),
-    port = (options.server && options.server.port) || 8888;
+    var port = (options.server && options.server.port) || 8888;
 
-  var url = URL.format({
-    protocol : 'http',
-    hostname : '127.0.0.1',
-    port : port + '',
-    pathname : path.join(tmpDir,'SpecRunner.html')
+    var url = URL.format({
+      protocol : 'http',
+      hostname : '127.0.0.1',
+      port : port + '',
+      pathname : path.join(baseDir,tmpRunner)
+    });
+
+    grunt.helper('jasmine-build-specrunner', baseDir, options, []);
+    grunt.helper('static-server', baseDir, port);
+    open(url)
+
   });
 
-  grunt.helper('jasmine-build-specrunner', tmp, options, []);
-  grunt.helper('static-server', '.', port);
-  open(url)
+  grunt.registerHelper('jasmine-build-specrunner', function(dir, options, reporters){
+    var jasmineCss = [
+      __dirname + '/../jasmine/lib/jasmine-core/jasmine.css'
+    ];
 
-});
+    var jasmineCore = [
+      __dirname + '/../jasmine/lib/jasmine-core/jasmine.js',
+      __dirname + '/../jasmine/lib/jasmine-core/jasmine-html.js'
+    ];
 
-grunt.registerHelper('jasmine-build-specrunner', function(dir, options, reporters){
-  var phantomHelper = grunt.task.getFile('jasmine/phantom-helper.js');
-  var jasmineHelper = grunt.task.getFile('jasmine/jasmine-helper.js');
+    var phantomHelper = __dirname + '/jasmine/phantom-helper.js';
+    var jasmineHelper = __dirname + '/jasmine/jasmine-helper.js';
 
-  var files = getScriptList(options.src, options.helpers, options.specs, phantomHelper, reporters, jasmineHelper);
-  fs.rmdir(dir);
-  fs.mkdir(dir);
-  var source;
-  grunt.file.copy(specRunnerTemplate, path.join(dir,'SpecRunner.html'), {
-    process : function(src) {
-      source = grunt.util._.template(src, {
-        inject : files
-      });
-      return source
+    var styles = getRelativeFileList(jasmineCss);
+    var scripts = getRelativeFileList(jasmineCore, options.src, options.helpers, options.specs, phantomHelper, reporters, jasmineHelper);
+
+    var specRunnerTemplate = __dirname + '/../jasmine/SpecRunner.tmpl';
+
+    var source;
+    grunt.file.copy(specRunnerTemplate, path.join(dir,tmpRunner), {
+      process : function(src) {
+        source = grunt.util._.template(src, {
+          scripts : scripts,
+          css : styles
+        });
+        return source
+      }
+    });
+    return source;
+  });
+
+  // stolen from grunt/task/server. Might be misunderstanding grunt tasks, but it didn't seem very reusable
+  grunt.registerHelper('static-server',function(base, port) {
+    base = path.resolve(base);
+
+    var server = connect();
+
+    if (grunt.option('debug')) {
+      connect.logger.format('grunt', ('[D] local server :method :url :status ' + ':res[content-length] - :response-time ms').magenta);
+      server.use(connect.logger('grunt'));
+    }
+
+    server.use(connect.static(base));
+    server.use(connect.directory(base));
+
+    grunt.verbose.writeln('Starting static web server on port ' + port);
+    return server.listen(port);
+  });
+
+  phantomjs.on('fail.timeout',function(){
+    grunt.log.writeln();
+    grunt.warn('PhantomJS timed out, possibly due to an unfinished async spec.', 90);
+  });
+
+  phantomjs.on('console',console.log.bind(console));
+  phantomjs.on('debug', grunt.log.debug.bind(grunt.log, 'phantomjs'));
+  phantomjs.on('write', grunt.log.write.bind(grunt.log));
+  phantomjs.on('writeln', grunt.log.writeln.bind(grunt.log));
+  phantomjs.on('onError',function(string, trace){
+    grunt.log.writeln((string + ' at... ').red);
+    if (trace) {
+      trace.forEach(function(pop) {
+        grunt.log.writeln('> ' + pop.file + ':' + pop.line + (pop.file.function ? ' ('+pop.file.function+')' : ''))
+      })
     }
   });
-  return source;
-});
 
-// stolen from grunt/task/server. Might be misunderstanding grunt tasks, but it didn't seem very reusable
-grunt.registerHelper('static-server',function(base, port) {
-  base = path.resolve(base);
+  phantomjs.on('jasmine.*', function() {
+    //var args = [this.event].concat(grunt.util.toArray(arguments));
+    // grunt 0.4.0
+    // grunt.event.emit.apply(grunt.event, args);
+  });
 
-  var server = connect();
+};
 
-  if (grunt.option('debug')) {
-    connect.logger.format('grunt', ('[D] local server :method :url :status ' + ':res[content-length] - :response-time ms').magenta);
-    server.use(connect.logger('grunt'));
-  }
-
-  server.use(connect.static(path.resolve('.')));
-  server.use(connect.directory(base));
-
-  grunt.verbose.writeln('Starting static web server on port ' + port + '.');
-  return server.listen(port);
-});
 
 function runPhantom(url,options,numReporters, cb) {
   var status;
@@ -151,17 +189,17 @@ function runPhantom(url,options,numReporters, cb) {
   });
 }
 
-function getScriptList(/* args... */) {
+function getRelativeFileList(/* args... */) {
   var list = Array.prototype.slice.call(arguments);
-  var base = path.resolve('.');
-  var scripts = [];
+  var base = path.resolve(baseDir);
+  var files = [];
   list.forEach(function(listItem){
-    scripts = scripts.concat(grunt.file.expandFiles(listItem));
+    files = files.concat(grunt.file.expandFiles(listItem));
   });
-  scripts = grunt.util._(scripts).map(function(script){
-    return path.resolve(script).replace(base,'');
+  files = grunt.util._(files).map(function(file){
+    return path.resolve(file).replace(base,'');
   });
-  return scripts;
+  return files;
 }
 
 function setupTestListeners(options,numReporters, doneCallback) {
@@ -218,21 +256,3 @@ function setupTestListeners(options,numReporters, doneCallback) {
   });
 }
 
-phantomjs.on('fail.timeout',function(){
-  grunt.log.writeln();
-  grunt.warn('PhantomJS timed out, possibly due to an unfinished async spec.', 90);
-});
-
-phantomjs.on('console',console.log.bind(console));
-phantomjs.on('debug',grunt.log.debug.bind(grunt.log, 'phantomjs'));
-phantomjs.on('write', grunt.log.write.bind(grunt.log));
-phantomjs.on('writeln', grunt.log.writeln.bind(grunt.log));
-phantomjs.on('error',function(string){
-  grunt.log.writeln(string.red);
-});
-
-phantomjs.on('jasmine.*', function() {
-  //var args = [this.event].concat(grunt.util.toArray(arguments));
-  // grunt 0.4.0
-  // grunt.event.emit.apply(grunt.event, args);
-});
