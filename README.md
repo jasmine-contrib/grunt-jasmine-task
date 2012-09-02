@@ -43,9 +43,13 @@ The base jasmine task requires phantomjs to be installed and in the executable p
 
 ## Running
 
-After successful configuration, you can run your tests with :
+After successful configuration, you can run your tests through phantomjs with :
 
 ```grunt jasmine```
+
+Or open in a web browser with
+
+```grunt jasmine-server```
 
 ## Example configuration
 
