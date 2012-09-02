@@ -4,14 +4,19 @@
 <head>
     <title>Jasmine Spec Runner</title>
 
-    <link rel="stylesheet" type="text/css" href="/jasmine/lib/jasmine-core/jasmine.css">
+    <% css.forEach(function(style){ %>
+    <link rel="stylesheet" type="text/css" href="<%= style %>">
+    <% }) %>
+
+<!--
     <script type="text/javascript" src="/jasmine/lib/jasmine-core/jasmine.js"></script>
     <script type="text/javascript" src="/jasmine/lib/jasmine-core/jasmine-html.js"></script>
+-->
+    <% scripts.forEach(function(script){ %>
+    <script type="text/javascript" src="<%= script %>"></script>
+    <% }) %>
 </head>
 
 <body>
-<% inject.forEach(function(script){ %>
-<script type="text/javascript" src="<%= script %>"></script>
-<% }) %>
 </body>
 </html>
