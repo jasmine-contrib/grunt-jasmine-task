@@ -49,6 +49,7 @@ After successful configuration, you can run your tests with :
 
 ## Release History
 
+* v0.5.2: Expanded to some more use cases.
 * v0.5.1: First release.
 * v0.5.0: (internal) Full rewrite again to dynamically generate specrunner.
 * v0.4.1: (internal) Logging
