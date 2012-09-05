@@ -31,6 +31,7 @@ var options, defaultOptions = {
 module.exports = function(g){
   grunt = g;
   grunt.util = grunt.utils;
+
   phantomjs = require('./lib/phantomjs').init(grunt);
 
   grunt.registerTask('jasmine', 'Run jasmine specs headlessly through PhantomJS.', function() {
@@ -38,9 +39,12 @@ module.exports = function(g){
 
     var done = this.async();
 
-    grunt.helper('jasmine-phantom-runner', options, function(err) {
+    grunt.helper('jasmine-phantom-runner', options, function(err,status) {
+      if (status && status.failed > 0) {
+        grunt.log.error(grunt.util._("%s of %s total specs failed").sprintf(status.failed, status.total));
+      }
       if (err) grunt.log.error(err);
-      done(!err);
+      done(!err && status.failed === 0);
     });
 
   });
@@ -151,15 +155,15 @@ module.exports = function(g){
   });
 
   phantomjs.on('console',console.log.bind(console));
+  phantomjs.on('verbose',grunt.verbose.writeln.bind(grunt.verbose));
   phantomjs.on('debug', grunt.log.debug.bind(grunt.log, 'phantomjs'));
   phantomjs.on('write', grunt.log.write.bind(grunt.log));
   phantomjs.on('writeln', grunt.log.writeln.bind(grunt.log));
   phantomjs.on('onError',function(string, trace){
-    grunt.log.writeln((string + ' at... ').red);
     if (trace) {
-      trace.forEach(function(pop) {
-        grunt.log.writeln('> ' + pop.file + ':' + pop.line + (pop.file.function ? ' ('+pop.file.function+')' : ''))
-      })
+      console.log(trace.stack.red);
+    } else {
+      console.log(string.red);
     }
   });
 
