@@ -21,6 +21,7 @@
   }
 
   ConsoleReporter.prototype = {
+    buffer : '',
     reportRunnerResults: function(runner) {
       var dur = (new Date()).getTime() - this.start_time;
       var failed = this.executed_specs - this.passed_specs;
@@ -48,20 +49,18 @@
         resultText = "Passed.";
       }
 
-      phantom.sendMessage('writeln',resultText);
 
       var results = spec.results();
       var items = results.getItems();
+      phantom.sendMessage('verbose',this.buffer + resultText);
       for (var i = 0; i < items.length; i++) {
         var item = items[i];
 
         if (item.type === 'log') {
           this.log(item.toString());
         } else if (item.type === 'expect' && item.passed && !item.passed()) {
-          phantom.sendMessage('error',' > ' + item.message);
-          if (item.trace.stack) {
-            this.log(' > ' + item.trace.stack);
-          }
+          phantom.sendMessage('console',this.buffer + resultText);
+          phantom.sendMessage('onError', item.message, item.trace);
         }
       }
 
@@ -70,7 +69,7 @@
 
     reportSpecStarting: function(spec) {
       this.executed_specs++;
-      phantom.sendMessage('write',spec.suite.description + ' : ' + spec.description + ' ... ');
+      this.buffer = spec.suite.description + ' : ' + spec.description + ' ... ';
     },
 
     reportSuiteResults: function(suite) {
@@ -79,7 +78,7 @@
     },
 
     log: function(str) {
-      phantom.sendMessage('console',str);
+      phantom.sendMessage('verbose',str);
     }
   };
 
