@@ -74,7 +74,7 @@ module.exports = function(g){
 
     runPhantom(url,options,phantomReporters.length,function(err,status){
       server.close();
-      cb(err,status)
+      if (typeof cb === 'function') cb(err,status)
     });
   });
 
@@ -93,7 +93,7 @@ module.exports = function(g){
     grunt.helper('jasmine-build-specrunner', baseDir, options, []);
     grunt.helper('static-server', baseDir, port);
     open(url)
-    cb();
+    if (typeof cb === 'function') cb();
   });
 
   grunt.registerHelper('jasmine-build-specrunner', function(dir, options, reporters){
