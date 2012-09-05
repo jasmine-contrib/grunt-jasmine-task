@@ -160,7 +160,7 @@ module.exports = function(g){
   phantomjs.on('write', grunt.log.write.bind(grunt.log));
   phantomjs.on('writeln', grunt.log.writeln.bind(grunt.log));
   phantomjs.on('onError',function(string, trace){
-    if (trace) {
+    if (trace && trace.stack) {
       console.log(trace.stack.red);
     } else {
       console.log(string.red);
