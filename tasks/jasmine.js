@@ -96,8 +96,11 @@ module.exports = function(g){
 
     grunt.helper('jasmine-build-specrunner', baseDir, options, []);
     grunt.helper('static-server', baseDir, port);
+    grunt.log.writeln('Run your tests at ' + url);
+
     var serverSettings = grunt.config('jasmine-server') || {};
     if (serverSettings.browser !== false) open(url)
+
     if (typeof cb === 'function') cb();
   });
 
