@@ -13,7 +13,13 @@ module.exports = function(grunt) {
       tasks: 'jasmine'
     },
     jasmine : {
-      specs : 'spec/**/*.js'
+      specs : 'spec/**/*.js',
+      server : {
+        openBrowser : true
+      }
+    },
+    'jasmine-server' : {
+      browser : true
     },
     jshint: {
       options: {
