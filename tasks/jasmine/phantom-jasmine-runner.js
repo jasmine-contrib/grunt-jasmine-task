@@ -56,6 +56,7 @@ setInterval( function(){
 // Create a new page.
 var page = require( 'webpage' ).create();
 
+
 // Jasmine sends its messages via alert(jsonstring);
 page.onAlert = function( args ){
     sendMessage( JSON.parse( args ) );
@@ -64,9 +65,25 @@ page.onAlert = function( args ){
 // Keep track if Jasmine has been injected already.
 var injected;
 
+const INJECT_MESSAGE = 'inject';
+
+function doInjection(){
+    if( injected ){
+        return;
+    }
+    injected = true;
+    // Inject Jasmine helper file.
+    sendDebugMessage( 'inject', jasmineHelper );
+    page.injectJs( jasmineHelper );
+}
+
 // Additional message sending
 page.onConsoleMessage = function( message ){
-    sendMessage( ['console', message] );
+    if( message == INJECT_MESSAGE ){
+        doInjection();
+    }else{
+        sendMessage( ['console', message] );
+    }
 };
 page.onResourceRequested = function( request ){
     if( /\/jasmine\.js$/.test( request.url ) ){
@@ -81,22 +98,22 @@ page.onResourceReceived = function( request ){
         sendDebugMessage( 'onResourceReceived', request.url );
     }
 };
-
+page.onInitialized = function() {
+    sendDebugMessage( 'page.onInitialized' );
+    page.evaluate(function(domContentLoadedMsg) {
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log(domContentLoadedMsg);
+        }, false);
+    }, INJECT_MESSAGE );
+}
 
 page.open( url, function( status ){
-    // Only execute this code if Jasmine has not yet been injected.
-    if( injected ){
-        return;
-    }
-    injected = true;
+    sendDebugMessage( 'page.open' )
     // The window has loaded.
     if( status !== 'success' ){
         // File loading failure.
         sendMessage( ['done_fail', url] );
     }else{
-        // Inject Jasmine helper file.
-        sendDebugMessage( 'inject', jasmineHelper );
-        page.injectJs( jasmineHelper );
         // Because injection happens after window load, "begin" must be sent
         // manually.
         sendMessage( ['begin'] );
