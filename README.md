@@ -13,17 +13,24 @@ grunt.loadNpmTasks('grunt-jasmine-runner');
 ```
 
 ## Config
+- jasmine
+  - src : Your source files to test, loaded first
+  - helpers : Any helpers files to aid in testing, loaded next
+  - specs : Spec files that contain your jasmine tests
+  - timeout : The timeout where the tests are abandoned
+  - server :
+    - port : The port to start the server on, defaults to 8888
+  - junit :
+    - output : The output directory for junit xml
+  - phantomjs : A hash of options to pass to phantomjs eg {'ignore-ssl-errors' : true}
 
-- src : Your source files to test, loaded first
-- helpers : Any helpers files to aid in testing, loaded next
-- specs : Spec files that contain your jasmine tests
-- timeout : The timeout where the tests are abandoned
-- junit :
-  - output : The output directory for junit xml
-- phantomjs : A hash of options to pass to phantomjs
+- jasmine-server
+  - browser : Open user's default browser automatically? Default true
+
+( all `jasmine` task configuration applies to `jasmine-server` )
 
 ```javascript
-jasmine : {
+'jasmine' : {
   src : 'src/**/*.js',
   specs : 'specs/**/*Spec.js',
   helpers : 'specs/helpers/*.js',
@@ -35,6 +42,9 @@ jasmine : {
     'ignore-ssl-errors' : true
   }
 },
+'jasmine-server' : {
+  browser : false
+}
 ```
 
 ## PhantomJS
