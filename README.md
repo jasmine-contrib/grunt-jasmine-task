@@ -2,6 +2,8 @@
 
 Grunt task for running jasmine specs via phantomjs.
 
+[![Build Status](https://secure.travis-ci.org/jsoverson/grunt-jasmine-runner.png)](http://travis-ci.org/jsoverson/grunt-jasmine-runner)
+
 ## Getting Started
 
 Install this grunt plugin next to your project's [grunt.js gruntfile][getting_started] with: `npm install grunt-jasmine-runner`
