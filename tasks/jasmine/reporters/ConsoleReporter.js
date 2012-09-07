@@ -29,7 +29,7 @@
       var fail_str = failed + (failed === 1 ? " failure in " : " failures in ");
 
       this.log("Runner Finished.");
-      this.log(spec_str + fail_str + (dur/1000) + "s.");
+      phantom.sendMessage('writeln', spec_str + fail_str + (dur/1000) + "s.");
       this.finished = true;
       phantom.sendMessage( 'jasmine.done.ConsoleReporter' );
     },
