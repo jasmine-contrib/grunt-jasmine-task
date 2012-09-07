@@ -1,6 +1,6 @@
 /**
  * Temporary - The lord of tmp.
- * 
+ *
  * Author: Veselin Todorov <hi@vesln.com>
  * Licensed under the MIT License.
  */
@@ -16,7 +16,7 @@ var Base = require('./base');
 
 /**
  * File constructor.
- * 
+ *
  * @param {String|null} name
  */
 function File(name) {
@@ -30,7 +30,7 @@ File.prototype.__proto__ = Base.prototype;
 
 /**
  * Creates new file.
- * 
+ *
  * @param {String} filename
  */
 File.prototype.create = function(filename) {
