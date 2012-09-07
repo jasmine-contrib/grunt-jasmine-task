@@ -1,7 +1,7 @@
 {
   "name"            : "grunt-jasmine-runner",
   "description"     : "Grunt task for running Jasmine specs",
-  "version"         : "0.5.3",
+  "version"         : "0.5.4",
   "homepage"        : "https://github.com/jsoverson/grunt-jasmine-runner",
   "author"          : {
     "name"  : "Jarrod Overson",
