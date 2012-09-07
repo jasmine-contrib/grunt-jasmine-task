@@ -27,7 +27,7 @@
     "node" : "*"
   },
   "scripts"         : {
-    "test" : "grunt test"
+    "test" : "grunt test jasmine"
   },
   "dependencies"    : {
     "connect"       : "2.4.4",
