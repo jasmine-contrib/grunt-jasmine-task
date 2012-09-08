@@ -30,7 +30,7 @@
       this.log("Runner Finished.");
       this.log(spec_str + fail_str + (dur/1000) + "s.");
       this.finished = true;
-      phantom.sendMessage( 'jasmine.done.ConsoleReporter' );
+      phantom.sendMessage( 'jasmine.done.ConsoleReporter' , dur);
     },
     reportRunnerStarting: function(runner) {
       this.started = true;

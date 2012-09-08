@@ -40,7 +40,7 @@ module.exports = function (grunt) {
   });
 
   phantomjs.on('jasmine.done.ConsoleReporter',function(elapsed){
-    phantomjs.emit('jasmine.done');
+    phantomjs.emit('jasmine.done', elapsed);
   });
 
   phantomjs.on('file',function(type,filename, xml){
