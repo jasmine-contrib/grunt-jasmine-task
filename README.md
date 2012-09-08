@@ -90,6 +90,7 @@ More info on creating grunt plugins
 
 ## Release History
 
+* v0.3.0: improving console reports
 * v0.2.2: removed grunt as a dependency
 * v0.2.1: added `errorReporting` configuration option
 * v0.2.0: added `timeout` configuration option
