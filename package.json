@@ -1,7 +1,7 @@
 {
     "name" : "grunt-jasmine-task",
     "description" : "Grunt task for running Jasmine specs",
-    "version" : "0.2.2",
+    "version" : "0.3.0",
     "homepage" : "https://github.com/creynders/grunt-jasmine-task",
     "author" : {
         "name" : "Camille Reynders",
@@ -30,7 +30,9 @@
         "test" : "grunt test"
     },
     "dependencies" : {
-        "temporary" : "~0.0.2"
+        "temporary" : "~0.0.2",
+        "semver" : "1.0.14",
+        "eventemitter2" : "0.4.9"
     },
     "devDependencies" : {
         "grunt" : "~0.3.9",
