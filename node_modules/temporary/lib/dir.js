@@ -1,6 +1,6 @@
 /**
  * Temporary - The lord of tmp.
- * 
+ *
  * Author: Veselin Todorov <hi@vesln.com>
  * Licensed under the MIT License.
  */
@@ -16,7 +16,7 @@ var Base = require('./base');
 
 /**
  * Dir constructor.
- * 
+ *
  * @param {String|null} name
  */
 function Dir(name) {
@@ -30,7 +30,7 @@ Dir.prototype.__proto__ = Base.prototype;
 
 /**
  * Creates new file.
- * 
+ *
  * @param {String} dirname
  */
 Dir.prototype.create = function(dirname) {
