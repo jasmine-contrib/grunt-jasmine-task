@@ -17,7 +17,7 @@ You can contact me on twitter: [@camillereynders](https://twitter.com/#!/camille
 
 Make sure you got [PhantomJS](http://phantomjs.org/) installed, which is a headless browser. Unfortunately PhantomJS cannot be installed automatically through grunt. [See the grunt faq for installation instructions](https://github.com/cowboy/grunt/blob/master/docs/faq.md#why-does-grunt-complain-that-phantomjs-isnt-installed).
 
-__Install this grunt plugin__ next to your project's [grunt.js gruntfile][getting_started] with: `npm install grunt-jasmine-task`
+__Install this grunt plugin__ next to your project's [grunt.js gruntfile][getting_started] with: `npm install grunt-jasmine-task` (if you want install this package from this fork: `npm install https://github.com/rfloriano/grunt-jasmine-task/tarball/master`)
 
 (ie. the plugin is installed locally. If you want to install it globally - which is not recommended - check out the official [grunt documentation][plugin_docs])
 
