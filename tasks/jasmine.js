@@ -36,30 +36,30 @@ module.exports = function( grunt ){
             status.passed += passedAssertions;
             status.total += totalAssertions;
             status.skipped += skippedAssertions;
-            
+
             var testName = suite + ' : ' + name + '...';
             if( grunt.option( 'verbose' ) ){
-	            grunt.log.write( testName );
-	            if( failedAssertions > 0 ){
+              grunt.log.write( testName );
+              if( failedAssertions > 0 ){
                     grunt.log.error();
-	            }else if( skippedAssertions > 0 ){
+              }else if( skippedAssertions > 0 ){
                     grunt.log.warn();
-	            }else{
-	            	grunt.log.ok();
-	            }
+              }else{
+                grunt.log.ok();
+              }
             }else{
-	            if( failedAssertions > 0 ){
-	            	if( errorReporting ){
-			            grunt.log.write( testName.red );
-			            grunt.log.error();
-	            	}else{
-	                    grunt.log.write( 'F'.red );
-	                }
-	            }else if( skippedAssertions > 0 ){
+              if( failedAssertions > 0 ){
+                if( errorReporting ){
+                  grunt.log.write( testName.red );
+                  grunt.log.error();
+                }else{
+                      grunt.log.write( 'F'.red );
+                  }
+              }else if( skippedAssertions > 0 ){
                     grunt.log.write( '*'.red );
-	            }else{
-	            	grunt.log.write( '.'.green );
-	            }
+              }else{
+                grunt.log.write( '.'.green );
+              }
             }
         },
         done : function( elapsed ){
@@ -90,7 +90,7 @@ module.exports = function( grunt ){
         if( typeof timeout === "undefined" ){
             timeout = 10000;
         }
-        
+
         errorReporting = !!grunt.config( [ 'jasmine', this.target, 'errorReporting' ] );
 
         // Get files as URLs.
@@ -161,7 +161,7 @@ module.exports = function( grunt ){
             }());
 
             // Launch PhantomJS.
-            grunt.helper( 'phantomjs', {
+            phantomjs({
                 code : 90,
                 args : [
                     // The main script file.
@@ -206,7 +206,7 @@ module.exports = function( grunt ){
     // HELPERS
     // ==========================================================================
 
-    grunt.registerHelper( 'phantomjs', function( options ){
+    var phantomjs = function( options ){
         return grunt.utils.spawn( { cmd : 'phantomjs', args : options.args }, function( err, result, code ){
             if( !err ){
                 return options.done( null );
@@ -230,6 +230,6 @@ module.exports = function( grunt ){
             }
             options.done( code );
         } );
-    } );
+    };
 
 };
