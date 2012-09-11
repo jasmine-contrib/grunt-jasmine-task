@@ -7,7 +7,7 @@
 Grunt task for running jasmine specs.
 
 __Status: stable__  
-__[!]__ Apparently there are some problems with getting this to work with PhantomJS 1.5 on both Windows and Linux (see [#2](https://github.com/creynders/grunt-jasmine-task/issues/2), [#4](https://github.com/creynders/grunt-jasmine-task/issues/4)) On Mac it works fine though.
+Any timeout troubles with tests finishing before the injection of the grunt task files should be solved, if not please reopen [#4](https://github.com/creynders/grunt-jasmine-task/issues/4).
 
 ## Contact
 
@@ -90,6 +90,7 @@ More info on creating grunt plugins
 
 ## Release History
 
+* v0.2.3: solved timeout woes [#4](https://github.com/creynders/grunt-jasmine-task/issues/4)
 * v0.2.2: removed grunt as a dependency
 * v0.2.1: added `errorReporting` configuration option
 * v0.2.0: added `timeout` configuration option
