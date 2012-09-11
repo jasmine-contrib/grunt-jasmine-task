@@ -2,7 +2,7 @@
     "name" : "grunt-jasmine-task",
     "description" : "Grunt task for running Jasmine specs",
     "version" : "0.2.3",
-    "homepage" : "https://github.com/creynders/grunt-jasmine-task",
+    "homepage" : "https://github.com/jasmine-contrib/grunt-jasmine-task",
     "author" : {
         "name" : "Camille Reynders",
         "email" : "info@creynders.be",
@@ -10,15 +10,15 @@
     },
     "repository" : {
         "type" : "git",
-        "url" : "git://github.com/creynders/grunt-jasmine-task.git"
+        "url" : "git://github.com/jasmine-contrib/grunt-jasmine-task.git"
     },
     "bugs" : {
-        "url" : "https://github.com/creynders/grunt-jasmine-task/issues"
+        "url" : "https://github.com/jasmine-contrib/grunt-jasmine-task/issues"
     },
     "licenses" : [
         {
             "type" : "MIT",
-            "url" : "https://github.com/creynders/grunt-jasmine-task/blob/master/LICENSE-MIT"
+            "url" : "https://github.com/jasmine-contrib/grunt-jasmine-task/blob/master/LICENSE-MIT"
         }
     ],
     "main" : "grunt.js",

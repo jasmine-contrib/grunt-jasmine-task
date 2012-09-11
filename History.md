@@ -1,4 +1,10 @@
 
+0.2.3 / 2012-09-11 
+==================
+
+  * added Contributors.md and modified Readme.md to reflect v0.2.3 changes
+  * fixed #4, timeouts occuring if jasmine helper injection happens after tests have run
+
 0.2.2 / 2012-08-02 
 ==================
 
