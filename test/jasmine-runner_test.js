@@ -1,4 +1,5 @@
-var grunt = require('grunt');
+var grunt = require('grunt'),
+fs = require('fs');
 
 /*
   ======== A Handy Little Nodeunit Reference ========
@@ -52,6 +53,49 @@ exports['jasmine-runner'] = {
       test.equal(status.total, 8, 'Ran all specs from example');
       test.equal(status.passed, 8, 'Passed all specs from example');
       test.ok(!err, 'No error received');
+      test.done();
+    }
+
+    grunt.helper('jasmine-phantom-runner', config, cb);
+  },
+  'custom template': function(test) {
+    test.expect(5);
+    // tests here
+
+    var config = {
+      timeout: 10000,
+      src     : 'jasmine/lib/jasmine-core/example/src/**/*.js',
+      helpers : 'jasmine/lib/jasmine-core/example/**/*Helper.js',
+      specs   : ['jasmine/lib/jasmine-core/example/**/*Spec.js'], // array to test support
+      server  : {
+        port : 8888
+      },
+      template: {
+        src: 'test/fixtures/customTemplate/custom.tmpl',
+        opts: {
+          title: 'foo'
+        }
+      },
+      junit : {
+        output : 'junit'
+      },
+      phantomjs : {
+        'ignore-ssl-errors' : true,
+        'local-to-remote-url-access' : true,
+        'web-security' : false
+      }
+    };
+
+    function cb(err,status){
+      test.equal(status.specs, 5, 'Found total specs from example');
+      test.equal(status.total, 8, 'Ran all specs from example');
+      test.equal(status.passed, 8, 'Passed all specs from example');
+      test.ok(!err, 'No error received');
+
+      var actual = grunt.file.read('_SpecRunner.html'),
+      expected = grunt.file.read('test/expected/customTemplate/_SpecRunner.html');
+
+      test.equal(expected, actual, 'generated spec runner with custom template');
       test.done();
     }
 

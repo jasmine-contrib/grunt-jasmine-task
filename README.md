@@ -20,6 +20,7 @@ grunt.loadNpmTasks('grunt-jasmine-runner');
   - helpers : Any helpers files to aid in testing, loaded next
   - specs : Spec files that contain your jasmine tests
   - timeout : The timeout where the tests are abandoned
+  - template : Path to a custom template.
   - server :
     - port : The port to start the server on, defaults to 8888
   - junit :
@@ -37,6 +38,7 @@ grunt.loadNpmTasks('grunt-jasmine-runner');
   specs : 'specs/**/*Spec.js',
   helpers : 'specs/helpers/*.js',
   timeout : 10000,
+  template : 'src/custom.tmpl',
   junit : {
     output : 'junit/'
   },

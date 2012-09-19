@@ -24,6 +24,10 @@ var options, defaultOptions = {
   specs   : [],
   src     : [],
   helpers : [],
+  template: {
+    src: __dirname + '/../jasmine/SpecRunner.tmpl',
+    opts: {}
+  },
   phantomjs : {}
 };
 
@@ -120,15 +124,18 @@ module.exports = function(g){
     var styles = getRelativeFileList(jasmineCss);
     var scripts = getRelativeFileList(jasmineCore, options.src, options.helpers, options.specs, phantomHelper, reporters, jasmineHelper);
 
-    var specRunnerTemplate = __dirname + '/../jasmine/SpecRunner.tmpl';
+    var specRunnerTemplate = typeof options.template === 'string' ? {
+      src: options.template,
+      opts: {}
+    } : options.template;
 
     var source;
-    grunt.file.copy(specRunnerTemplate, path.join(dir,tmpRunner), {
+    grunt.file.copy(specRunnerTemplate.src, path.join(dir,tmpRunner), {
       process : function(src) {
-        source = grunt.util._.template(src, {
+        source = grunt.util._.template(src, grunt.util._.extend({
           scripts : scripts,
           css : styles
-        });
+        }, specRunnerTemplate.opts));
         return source
       }
     });
