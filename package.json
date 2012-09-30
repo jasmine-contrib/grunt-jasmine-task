@@ -2,7 +2,7 @@
   "name"            : "grunt-jasmine-runner",
   "description"     : "Grunt task for running Jasmine specs",
   "version"         : "0.5.5",
-  "homepage"        : "https://github.com/jsoverson/grunt-jasmine-runner",
+  "homepage"        : "https://github.com/jasmine-contrib/grunt-jasmine-runner",
   "author"          : {
     "name"  : "Jarrod Overson",
     "email" : "jsoverson@gmail.com",
@@ -10,15 +10,15 @@
   },
   "repository"      : {
     "type" : "git",
-    "url"  : "git://github.com/jsoverson/grunt-jasmine-runner.git"
+    "url"  : "git://github.com/jasmine-contrib/grunt-jasmine-runner.git"
   },
   "bugs"            : {
-    "url" : "https://github.com/jsoverson/grunt-jasmine-runner/issues"
+    "url" : "https://github.com/jasmine-contrib/grunt-jasmine-runner/issues"
   },
   "licenses"        : [
     {
       "type" : "MIT",
-      "url"  : "https://github.com/jsoverson/grunt-jasmine-runner/blob/master/LICENSE-MIT"
+      "url"  : "https://github.com/jasmine-contrib/grunt-jasmine-runner/blob/master/LICENSE-MIT"
     }
   ],
   "main"            : "grunt.js",
