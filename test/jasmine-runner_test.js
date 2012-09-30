@@ -21,6 +21,8 @@ fs = require('fs');
     test.ifError(value)
 */
 
+var task = require('../tasks/jasmine');
+
 exports['jasmine-runner'] = {
   setUp: function(done) {
     // setup here
@@ -56,7 +58,7 @@ exports['jasmine-runner'] = {
       test.done();
     }
 
-    grunt.helper('jasmine-phantom-runner', config, cb);
+    task.phantomRunner(config, cb);
   },
   'custom template': function(test) {
     test.expect(5);
@@ -99,6 +101,6 @@ exports['jasmine-runner'] = {
       test.done();
     }
 
-    grunt.helper('jasmine-phantom-runner', config, cb);
+    task.phantomRunner(config, cb);
   }
 };
