@@ -72,7 +72,7 @@ Here is an [example grunt jasmine configuration](https://github.com/jsoverson/gr
 
 ## Release History
 
-* v0.5.6: Refactored in prep for grunt 0.4.0
+* v0.5.6: Support for custom templates. Refactored in prep for grunt 0.4.0
 * v0.5.5: Verbosity tweaks. Necessitated a push.
 * v0.5.4: Added configuration to turn off the automatic browser open
 * v0.5.3: Addressing issues #2 & #3. Added better error handling
