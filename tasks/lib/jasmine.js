@@ -49,7 +49,7 @@ function getRelativeFileList(/* args... */) {
     files = files.concat(grunt.file.expandFiles(listItem));
   });
   files = grunt.util._(files).map(function(file){
-    return path.resolve(file).replace(base,'');
+    return path.resolve(file).replace(base,'').replace(/\\/g,'/');
   });
   return files;
 }
