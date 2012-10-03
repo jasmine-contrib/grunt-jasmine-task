@@ -19,6 +19,7 @@ grunt.loadNpmTasks('grunt-jasmine-runner');
   - src : Your source files to test, loaded first
   - helpers : Any helpers files to aid in testing, loaded next
   - specs : Spec files that contain your jasmine tests
+  - amd: If true the spec files will be loaded via an AMD `require` call.
   - timeout : The timeout where the tests are abandoned
   - template : Path to a custom template.
   - server :
@@ -49,6 +50,27 @@ grunt.loadNpmTasks('grunt-jasmine-runner');
 'jasmine-server' : {
   browser : false
 }
+```
+
+## AMD Specs
+
+If the `amd` flag is set in the config specs will be loaded via an AMD `require` call.  This does not make an assumption about the AMD library being used, you must specify the path to that in the helpers option e.g.
+
+```javascript
+helpers: [
+  '/path/to/require.js',
+  '/path/to/requireConfig.js'
+],
+```
+
+Spec files should define the module(s) they are testing directly as the `src` config option will be ignored in this case e.g.
+
+```javascript
+define(['/src/myModule.js'], function(MyModule){
+  describe('MyModule', function(){
+    // etc...
+  });
+});
 ```
 
 ## PhantomJS
