@@ -15,7 +15,7 @@ module.exports = function(grunt) {
     jasmine : {
       specs : 'spec/**/*.js',
       server : {
-        openBrowser : true
+        port : 9900,
       }
     },
     'jasmine-server' : {
