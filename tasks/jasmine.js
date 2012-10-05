@@ -15,6 +15,8 @@ var fs = require('fs'),
     sysopen = require('open'),
     grunt = require('grunt');
 
+grunt.util = grunt.utils;
+
 var server = require('./lib/server'),
     jasmine = require('./lib/jasmine'),
     phantomjs = require('./lib/phantomjs');
