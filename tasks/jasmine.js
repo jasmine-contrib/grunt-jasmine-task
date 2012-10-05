@@ -91,8 +91,8 @@ task.phantomRunner = function(options,cb){
   options = grunt.util._.extend({},defaultOptions,options);
 
   var phantomReporters = [
-      grunt.task.getFile('jasmine/reporters/ConsoleReporter.js'),
-      grunt.task.getFile('jasmine/reporters/JUnitReporter.js')
+      __dirname + '/jasmine/reporters/ConsoleReporter.js',
+      __dirname + '/jasmine/reporters/JUnitReporter.js'
     ],
     port = (options.server && options.server.port) || 8888;
 
