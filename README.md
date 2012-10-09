@@ -72,6 +72,7 @@ Here is an [example grunt jasmine configuration](https://github.com/jsoverson/gr
 
 ## Release History
 
+* v0.5.9: Fixed context issue ("Can't open 'null'")
 * v0.5.8: Bugfixes
 * v0.5.7: Fixed bug due to grunt 0.3.0/0.4.0 inconsistencies
 * v0.5.6: Support for custom templates. Refactored in prep for grunt 0.4.0
