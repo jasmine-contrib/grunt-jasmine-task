@@ -39,6 +39,7 @@ var baseDir = '.',
 module.exports = task;
 
 function task(grunt){
+  phantomjs = phantomjs.init(grunt);
   grunt.util = grunt.utils;
 
   grunt.registerTask('jasmine', 'Run jasmine specs headlessly through PhantomJS.', function() {
