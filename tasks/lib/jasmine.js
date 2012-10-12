@@ -20,7 +20,13 @@ exports.buildSpecrunner = function(dir, options, reporters){
   var jasmineHelper = __dirname + '/../jasmine/jasmine-helper.js';
 
   var styles = getRelativeFileList(jasmineCss);
-  var scripts = getRelativeFileList(jasmineCore, options.src, options.helpers, options.specs, phantomHelper, reporters, jasmineHelper);
+
+  if (options.amd) {
+    var specs = getRelativeFileList(options.specs);
+    var scripts = getRelativeFileList(jasmineCore, options.helpers, phantomHelper, reporters, jasmineHelper);
+  } else {
+    var scripts = getRelativeFileList(jasmineCore, options.src, options.helpers, options.specs, phantomHelper, reporters, jasmineHelper);
+  }
 
   var specRunnerTemplate = typeof options.template === 'string' ? {
     src: options.template,
@@ -32,6 +38,7 @@ exports.buildSpecrunner = function(dir, options, reporters){
     process : function(src) {
       source = grunt.util._.template(src, grunt.util._.extend({
         scripts : scripts,
+        specs: specs,
         css : styles
       }, specRunnerTemplate.opts));
       return source;
