@@ -94,6 +94,7 @@ Here is an [example grunt jasmine configuration](https://github.com/jsoverson/gr
 
 ## Release History
 
+* v0.6.1: Fixed bug accounting for windows paths
 * v0.6.0: Added basic support for AMD loading via requirejs
 * v0.5.9: Fixed context issue ("Can't open 'null'")
 * v0.5.8: Bugfixes
