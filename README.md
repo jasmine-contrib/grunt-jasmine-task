@@ -1,3 +1,11 @@
+
+
+# THIS TASK IS NO LONGER SUPPORTED
+
+This task does not work with the current stable grunt (0.4.0) and has been replaced by [grunt-contrib-jasmine](https://github.com/gruntjs/grunt-contrib-jasmine)
+
+***
+
 [grunt]: https://github.com/cowboy/grunt
 [getting_started]: https://github.com/cowboy/grunt/blob/master/docs/getting_started.md
 [plugin_docs]: https://github.com/cowboy/grunt/blob/master/docs/plugins.md
